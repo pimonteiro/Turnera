@@ -23,19 +23,19 @@ Your social network of choice. *wink wink*
 
 /api/users/:user_id/posts
 	  / GET POST
-	  /:post_id GET DELETE 
+	  /:post_id GET DELETE
 
 /api/users/:user_id/friends
 	  / GET
 	  /:friend_id DELETE POST
-	  
+
 /api/users/:user_id/friend-requests
 	  / GET
 	  /:friend_id POST DELETE
 
 /api/groups/:groups_id/posts
 	  / GET POST
-	  /:post_id GET DELETE 
+	  /:post_id GET DELETE
 
 /api/posts/:post_id/like
 	  / POST
