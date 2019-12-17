@@ -22,26 +22,20 @@ Your social network of choice. *wink wink*
 	  /:group_id GET DELETE POST
 
 /api/users/:user_id/posts
-	  / GET POST
-	  /:post_id GET DELETE
+	  / GET
+	  /:post_id GET DELETE POST
 
 /api/users/:user_id/friends
-	  / GET
-	  /:friend_id DELETE POST
+	  / POST GET
+	  /:friend_id DELETE
 
-/api/users/:user_id/friend-requests
-	  / GET
-	  /:friend_id POST DELETE
+/api/users/:user_id/friends-request
+	  / GET POST
+	  /:friend-request_id POST DELETE
 
 /api/groups/:groups_id/posts
-	  / GET POST
-	  /:post_id GET DELETE
-
-/api/posts/:post_id/like
-	  / POST
-
-/api/posts/:post_id/comment
-	  / POST
+	  / GET
+	  /:post_id GET DELETE POST
 
 /api/search
 	  /users POST
