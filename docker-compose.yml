@@ -7,9 +7,9 @@ services:
     - 7687:7687
     volumes:
     - ${PWD}/neo4j/data:/data
-    environment: 
+    environment:
       NEO4J_AUTH: neo4j/admin
-      
+
   db:
     image: mongo
     environment:
