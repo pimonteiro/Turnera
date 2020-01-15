@@ -1,0 +1,4 @@
+extends: seegno
+rules:
+  no-process-env: off
+  react/jsx-no-literals: off
