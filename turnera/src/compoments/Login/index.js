@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import axios from 'axios'
-import auth from '../../auth'
+import config from '../../config'
 
 class Login extends Component{
     constructor(props){
@@ -8,21 +8,19 @@ class Login extends Component{
     }
 
     login() {
-      axios.get("http://localhost:4444/users")
+      axios.get(config.apiURL + "")
         .then(res => {
           console.log("Login done!")
-          auth.login(() => {
-            this.props.history.push("/feed")  
-          })
-          
+          localStorage.setItem('session', res);
+          localStorage.setItem('loggedIn',true)
+          console.log("Token: " + localStorage.getItem('token'))
+          this.props.history.push("/feed")  
         })
         .catch(res => console.log("Login error! -> " + res))
     }
 
     logout() {
-      auth.logout(() => {
-        this.props.history.push("/")
-      })
+      this.props.history.push("/")
     }
 
     render() {

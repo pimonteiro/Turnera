@@ -2,8 +2,6 @@ import React from 'react'
 import logo from './logo.svg'
 import './App.css'
 import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom'
-import auth from './auth'
-
 
 import Login from './compoments/Login/index'
 import Register from './compoments/Register/index'
@@ -18,7 +16,7 @@ const ProtectedRoute = ({component: Component, ...rest}) => {
   return (
     <Route {...rest}
     render = {props => {
-      if(auth.isAuthenticated()){
+      if(localStorage.getItem('loggedIn')){
         return <Component {...props} />
       }
       else{
