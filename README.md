@@ -22,8 +22,8 @@ Your social network of choice. *wink wink*
 	  /:group_id GET DELETE POST
 
 /api/users/:user_id/posts
-	  / GET
-	  /:post_id GET DELETE POST
+	  / GET POST
+	  /:post_id GET DELETE 
 
 /api/users/:user_id/friends
 	  / GET
@@ -34,8 +34,8 @@ Your social network of choice. *wink wink*
 	  /:friend_id POST DELETE
 
 /api/groups/:groups_id/posts
-	  / GET
-	  /:post_id GET DELETE POST
+	  / GET POST
+	  /:post_id GET DELETE 
 
 /api/search
 	  /users POST

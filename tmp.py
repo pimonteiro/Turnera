@@ -19,7 +19,7 @@ def create_cities():
             tx = session.begin_transaction()
 
             for city in cities:
-                print(create_city(tx, city))
+                create_city(tx, city)
             
             tx.commit()
 
@@ -30,7 +30,7 @@ def create_users():
             tx = session.begin_transaction()
 
             for user in users:
-                print(create_user(tx, user))
+                create_user(tx, user)
             
             tx.commit()
 
@@ -95,7 +95,7 @@ def create_groups():
             tx = session.begin_transaction()
 
             for group in groups:
-                print(create_group(tx, group))
+                create_group(tx, group)
             
             tx.commit()
 
@@ -138,4 +138,62 @@ def create_friend_request():
 
             tx.commit()
 
-create_friend_request()
+def create_posts():
+    with driver.session() as session:
+        with open('neo4j/json-data/posts.json', 'r') as file:
+            posts = json.load(file)
+            tx = session.begin_transaction()
+
+            for post in posts:
+                match_like = "MATCH (user{n}:User) WHERE user{n}.id = '{id}'\n"
+                match_owner = "MATCH (user:User) WHERE user.id = '{id}'\n"
+                match_group = "MATCH (group:Group) WHERE group.id = '{id}'\n"
+                create_like = "CREATE (user{n})-[:likes]->(post)\n"
+                create_owner = "CREATE (user)-[:post]->(post)\n"
+                create_group = "CREATE (group)-[:post]->(post)\n"
+
+                query = ""
+                i = 1
+
+                create_list = []
+                match_list = []
+
+                for user in post['likes']:
+                    match_list.append(match_like.format(n = i, id = user))
+                    create_list.append(create_like.format(n = i))
+                    i += 1
+
+                match_list.append(match_owner.format(id = post['owner']))
+                
+                if post['group']:
+                    match_list.append(match_group.format(id = post['group']))
+
+                for line in match_list:
+                    query += line
+
+                query += "CREATE (post:Post {id: $id, text: $text, hashtags: $hashtags})\n"
+
+                create_list.append(create_owner)
+
+                if post['group']:
+                    create_list.append(create_group)
+
+                for line in create_list:
+                    query += line
+                
+                tx.run(
+                    query,
+                    text = post['text'],
+                    id = post['id'],
+                    hashtags = post['hashtags']
+                )
+
+            tx.commit()
+
+
+#create_cities()
+#create_users()
+#create_groups()
+#create_friendship()
+#create_friend_request()
+#create_posts()

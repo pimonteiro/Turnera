@@ -1,6 +1,7 @@
 var express = require('express');
 var router = express.Router();
 var neo4j = require('neo4j-driver')
+var uuid4 = require('uuid4')
 
 var driver = neo4j.driver(
     'bolt://localhost',
@@ -10,6 +11,8 @@ var driver = neo4j.driver(
 //                                  ----------------------- USERS ---------------------------
 router.post('/users', (req, res, next) => {
     var session = driver.session()
+
+    req.body.id = uuid4()
 
     session.run(
         "CREATE (u:User $user) RETURN u",
@@ -289,6 +292,8 @@ router.delete('/users/:id/friend-requests/:fid', (req, res, next) => {
 //                                  ----------------------- GROUPS ---------------------------
 router.post('/groups', (req, res, next) => {
     var session = driver.session()
+
+    req.body.id = uuid4()
 
     session.run(
         "CREATE (g:Group $group) RETURN g",
