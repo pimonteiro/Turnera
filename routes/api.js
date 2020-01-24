@@ -289,6 +289,50 @@ router.delete('/users/:id/friend-requests/:fid', (req, res, next) => {
     })
 });
 
+//                                  ----------------------- USERS/POSTs-----------------
+
+router.post('/users/:id/friend-requests/:fid', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (u:User { id: $id }), (f:User { id: $fid }) \
+        CREATE (u)-[:friend_request]->(f) \
+        RETURN u",
+        { id: req.params.id, fid: req.params.fid }
+    )
+    .then(data => {
+        res.jsonp(data.records[0].get('u').properties)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.get('/users/:id/posts', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (u:User { id: $id })-[:post]-(p:Post), (p)-[r:Comment]-(a:User) RETURN p, a, r",
+        { id: req.params.id }
+    )
+    .then(data => {
+        let comments = []
+        data.records.forEach(record => {
+            console.log(record.get('r').properties.text)
+        })
+        res.jsonp({})
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
 //                                  ----------------------- GROUPS ---------------------------
 router.post('/groups', (req, res, next) => {
     var session = driver.session()
@@ -315,11 +359,20 @@ router.get('/groups/:id', (req, res, next) => {
     var session = driver.session()
 
     session.run(
-        "MATCH (g:Group { id: $id }) RETURN g",
+        "MATCH (g:Group { id: $id })-[:member]-(u:User) RETURN g, u",
         { id: req.params.id }
     )
     .then(data => {
-        res.jsonp(data.records[0].get('g').properties)
+        let members = []
+        let ret = data.records[0].get('g').properties
+
+        data.records.forEach(record => {
+            members.push(record.get('u').properties.id)
+        })
+
+        ret.members = members
+
+        res.jsonp(ret)
     })
     .catch(err => {
         res.jsonp(err)

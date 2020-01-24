@@ -191,9 +191,30 @@ def create_posts():
             tx.commit()
 
 
+def create_comments():
+    with driver.session() as session:
+        with open('neo4j/json-data/comments.json', 'r') as file:
+            comments = json.load(file)
+            tx = session.begin_transaction()
+
+            for comment in comments:
+                tx.run(
+                    """
+                    MATCH (u:User {id: $uid}), (p:Post {id: $pid})
+                    CREATE (u)-[:comment {text: $text}]->(p)
+                    """,
+                    uid = comment['user'],
+                    pid = comment['post'],
+                    text = comment['text']
+                )
+
+            tx.commit()
+
+
 #create_cities()
 #create_users()
 #create_groups()
 #create_friendship()
 #create_friend_request()
 #create_posts()
+#create_comments()
