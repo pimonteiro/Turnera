@@ -3,36 +3,41 @@ import Feed from '../Feed/index'
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
-import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Container from "@material-ui/core/Container";
 import {Grid, Paper} from "@material-ui/core";
-import { makeStyles } from '@material-ui/core/styles';
 
 import { useStyles, onChange } from '../index';
 
 import axios from 'axios'
 import config from '../../config'
+import { useParams } from "react-router-dom"
+
 
 class Group extends Component{
     constructor(props){
       super(props)
       this.state = {
         id: "",
-        name: "Teste",
+        name: "",
         descr: "",
-        members: ["Filipe Monteiro", "João Vilaça", "Leonardo Neri"]
+        members: []
       }
+
       this.exitGroup = this.exitGroup.bind(this)
     }
 
     componentDidMount(){
+      const { group_id } = this.props.match.params
+      onChange(this,group_id,"id")
       axios.get(config.apiURL + "/groups/" + this.state.id)
       .then(res => {
           //Store received data
+          onChange(this,res.data.name,"name")
+          onChange(this,res.data.members,"members")
       })
       .catch(res => {
-        this.props.history.push("/group/group_not_found")
+        this.props.history.push("/404")
       })
     }
 

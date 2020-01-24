@@ -6,6 +6,8 @@ import {BrowserRouter as Router, Switch, Route, Redirect} from 'react-router-dom
 import Homepage from './compoments/Homepage/index'
 import Group from './compoments/Group/index'
 import NotFound from './compoments/404/index'
+import Profile from './compoments/Profile/index'
+
 
 
 const ProtectedRoute = ({component: Component, ...rest}) => {
@@ -31,7 +33,8 @@ function App() {
       <div className="App">
         <Switch>
           <Route path="/" exact component={Homepage} />
-          <Route path="/group/:name" exact component={Group} />
+          <Route path="/group/:group_id" exact component={Group} />
+          <Route path="/users/:user_id" exact component={Profile} />
 
           <Route path="*" component={NotFound}/>
         </Switch>
