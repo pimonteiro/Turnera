@@ -28,7 +28,7 @@ export default class App extends React.Component {
         <Switch>
           <Route path={'/'}><Home /></Route>
           <Route path={'/group/:group_id'}><Group /></Route>
-    <Route path={'/users/:user_id'} component={Profile}></Route>
+          <Route path={'/users/:user_id'}><Profile /></Route>
         </Switch>
       </BrowserRouter> : <BrowserRouter>
         <Switch>

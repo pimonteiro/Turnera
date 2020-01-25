@@ -43,6 +43,10 @@ export default class Feed extends React.Component {
   renderPosts = () => {
     const renderedPosts = [];
 
+    if (this.state.posts.length === 0) {
+      renderedPosts.push(<h3>Sem publicações</h3>);
+    }
+
     this.state.posts.forEach((post, index) =>
       renderedPosts.push(
         <Card
