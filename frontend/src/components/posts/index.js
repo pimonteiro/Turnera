@@ -1,7 +1,6 @@
-import { MdThumbUp } from 'react-icons/md';
 
-import Card from 'react-bootstrap/Card';
 import React from 'react';
+import renderPost from './postRender';
 
 const posts = [
   {
@@ -36,7 +35,9 @@ export default class Feed extends React.Component {
     super(props);
 
     this.state = {
-      posts
+      groupId: props.groupId,
+      posts,
+      userId: props.userId
     };
   }
 
@@ -49,47 +50,11 @@ export default class Feed extends React.Component {
 
     this.state.posts.forEach((post, index) =>
       renderedPosts.push(
-        <Card
-          className={'mb-5'}
-          key={index}
-          style={{ fontSize: '20px', width: '80rem' }}
-        >
-          <Card.Body>
-            <a href={`/users/${post.owner.id}`}>
-              <Card.Text>
-                { post.owner.name }
-              </Card.Text>
-            </a>
-            <Card.Img
-              alt={'user_image'}
-              className={'my-3'}
-              src={post.owner.image}
-              style={{ maxHeight: '150px', maxWidth: '150px' }}
-            />
-            <Card.Text style={{ fontSize: '20px' }}>
-              { post.text }
-            </Card.Text>
-            <Card.Text>
-              { post.likes.length } <MdThumbUp className={'mb-1'} /> - { this.renderHashtags(post.hashtags) }
-            </Card.Text>
-          </Card.Body>
-        </Card>
+        renderPost(post, index)
       )
     );
 
     return renderedPosts;
-  };
-
-  renderHashtags = hashtags => {
-    const renderedHastags = [];
-
-    hashtags.forEach((hashtag, index) =>
-      renderedHastags.push(
-        <span key={index}>{`#${hashtag} `}</span>
-      )
-    );
-
-    return renderedHastags;
   };
 
   render() {
