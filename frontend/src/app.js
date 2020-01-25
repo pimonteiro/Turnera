@@ -3,6 +3,7 @@ import { Home } from './components/home';
 
 import Group from './components/group';
 import Navbar from './components/navbar/bar';
+import Post from './components/posts/show';
 import Profile from './components/profile';
 import React from 'react';
 import Signin from './components/session/signin';
@@ -26,17 +27,31 @@ export default class App extends React.Component {
       localStorage.getItem('loggedIn') === 'true' ? <BrowserRouter>
         <Navbar />
         <Switch>
-          <Route path={'/'}><Home /></Route>
-          <Route path={'/group/:group_id'}><Group /></Route>
-          <Route path={'/users/:user_id'}><Profile /></Route>
+          <Route
+            component={Home}
+            exact
+            path={'/'}
+          />
+          <Route
+            component={Post}
+            path={'/posts/:post_id'}
+          />
+          <Route
+            component={Group}
+            path={'/group/:group_id'}
+          />
+          <Route
+            component={Profile}
+            path={'/users/:user_id'}
+          />
         </Switch>
       </BrowserRouter> : <BrowserRouter>
         <Switch>
           <Route path={'/'}>
-            <Signup callback={this.userLoggedIn} />
+            <Signin callback={this.userLoggedIn} />
           </Route>
           <Route path={'/register'}>
-            <Signin callback={this.userLoggedIn} />
+            <Signup callback={this.userLoggedIn} />
           </Route>
         </Switch>
       </BrowserRouter>

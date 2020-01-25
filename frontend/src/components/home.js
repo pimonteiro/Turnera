@@ -1,4 +1,4 @@
-import Feed from './feed';
+import Feed from './posts';
 import React from 'react';
 
 export const Home = () => {
