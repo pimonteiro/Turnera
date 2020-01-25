@@ -1,6 +1,9 @@
+import { Grid } from '@material-ui/core';
+import { MdSend } from 'react-icons/md';
 
+import CreatePost from './create-post';
 import React from 'react';
-import renderPost from './postRender';
+import renderPost from './post-render';
 
 const posts = [
   {
@@ -50,7 +53,10 @@ export default class Feed extends React.Component {
 
     this.state.posts.forEach((post, index) =>
       renderedPosts.push(
-        renderPost(post, index)
+        <div key={index}>
+          <a href={`/posts/${post.id}`}><MdSend size={'1.5em'} /></a>
+          { renderPost(post, index) }
+        </div>
       )
     );
 
@@ -59,9 +65,18 @@ export default class Feed extends React.Component {
 
   render() {
     return (
-      <div style={{ marginLeft: '23%' }}>
+      <Grid
+        alignItems={'center'}
+        container
+        direction={'column'}
+        justify={'center'}
+      >
+        <CreatePost
+          groupId={this.state.groupId}
+          userId={this.state.userId}
+        />
         { this.renderPosts() }
-      </div>
+      </Grid>
     );
   }
 

@@ -1,5 +1,5 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  IconButton, MenuItem, Select, TextField, Typography, Paper, Grid } from '@material-ui/core';
+  Grid, IconButton, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
 import { onChange, useStyles } from '../index';
 
@@ -7,7 +7,7 @@ import React from 'react';
 import SubmitFile from '../submitfile/index';
 import axios from 'axios';
 import config from '../../config';
-import renderPost from '../posts/postRender';
+import renderPost from '../posts/post-render';
 
 const posts = [
   {
@@ -169,14 +169,15 @@ class Profile extends React.Component {
     return renderedPosts;
   };
 
-
   render() {
     return (
       <Grid container>
-        <Grid item xs={3}>
+        <Grid item
+          xs={3}
+        >
           <Container className={'pt-xl-5'}
-          component={'main'}
-          maxWidth={'xs'}
+            component={'main'}
+            maxWidth={'xs'}
           >
             <CssBaseline />
             <div className={useStyles.paper}>
@@ -277,13 +278,16 @@ class Profile extends React.Component {
                 </Button>
               </form>
             </div>
-            </Container>
-          </Grid>
-          <Grid item xs={9} justify="center">
-            <div style={{ marginRight: '5%' }}>
-              { this.renderPosts() }
-            </div>
-          </Grid>
+          </Container>
+        </Grid>
+        <Grid item
+          justify={'center'}
+          xs={9}
+        >
+          <div style={{ marginRight: '5%' }}>
+            { this.renderPosts() }
+          </div>
+        </Grid>
 
       </Grid>
     );
