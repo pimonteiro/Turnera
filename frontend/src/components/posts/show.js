@@ -1,7 +1,7 @@
 
 import Card from 'react-bootstrap/Card';
 import React from 'react';
-import renderPost from './postRender';
+import renderPost from './post-render';
 
 const post = {
   group: '5700a8d1-fd10-4517-9c58-a6a7ae37f2b1',
