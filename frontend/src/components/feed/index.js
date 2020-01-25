@@ -1,3 +1,5 @@
+import { MdThumbUp } from 'react-icons/md';
+
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 
@@ -64,7 +66,7 @@ export default class Feed extends React.Component {
               { post.text }
             </Card.Text>
             <Card.Text>
-              { this.renderHashtags(post.hashtags) }
+              { post.likes.length } <MdThumbUp className={'mb-1'} /> - { this.renderHashtags(post.hashtags) }
             </Card.Text>
           </Card.Body>
         </Card>
