@@ -1,130 +1,132 @@
-import { Grid } from '@material-ui/core';
-import { URL, onChange, useStyles } from '../index';
+import React, { Component } from "react"
+import Feed from '../Feed/index'
 
-import Button from '@material-ui/core/Button';
-import Container from '@material-ui/core/Container';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Feed from '../feed/index';
-import React from 'react';
-import Typography from '@material-ui/core/Typography';
-import axios from 'axios';
+import CssBaseline from "@material-ui/core/CssBaseline";
+import Typography from "@material-ui/core/Typography";
+import Button from "@material-ui/core/Button";
+import Container from "@material-ui/core/Container";
+import {Grid, Paper, TextField} from "@material-ui/core";
 
-class Group extends React.Component {
+import { useStyles, onChange } from '../index';
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      descr: '',
-      id: '',
-      members: [],
-      name: ''
-    };
+import axios from 'axios'
+import config from '../../config'
+import { useParams } from "react-router-dom"
 
-    this.exitGroup = this.exitGroup.bind(this);
-  }
 
-  exitGroup() {
-    axios.delete(`${URL}...`)
-      .then(() => {
-        this.props.push('/feed');
+class Group extends Component{
+    constructor(props){
+      super(props)
+      this.state = {
+        id: "",
+        name: "",
+        descr: "",
+        members: [],
+        input: {
+          text: "",
+          file: ""
+        }
+      }
+
+      this.exitGroup = this.exitGroup.bind(this)
+    }
+
+    componentDidMount(){
+      const { group_id } = this.props.match.params
+      onChange(this,group_id,"id")
+      axios.get(config.apiURL + "/groups/" + this.state.id)
+      .then(res => {
+          //Store received data
+          onChange(this,res.data.name,"name")
+          onChange(this,res.data.members,"members")
       })
       .catch(res => {
-        console.log(res);
-      });
-  }
-
-  componentDidMount() {
-    const { groupId } = this.props.match.params;
-
-    onChange(this, groupId, 'id');
-    axios.get(`${URL}/groups/${this.state.id}`)
-      .then(res => {
-        // Store received data
-        onChange(this, res.data.name, 'name');
-        onChange(this, res.data.members, 'members');
+        //this.props.history.push("/404")
       })
-      .catch(() => {
-        this.props.history.push('/404');
-      });
-  }
+    }
 
-  render() {
-    const membersList = [];
+    exitGroup(){
+      axios.delete(config.apiURL + "...")
+      .then(res => {
+        this.props.push("/feed")
+      })
+      .catch(res => {
+        console.log(res)
+      })
+    }
+  
+    render() {
+      const members_list = []
+      this.state.members.forEach(element => {
+      members_list.push(<a href="linktomember">{element} </a>) 
+      })
 
-    this.state.members.forEach(element => {
-      membersList.push(<a href={'linktomember'}>{element} </a>);
-    });
-
-    return (
-      <Container component={'main'}>
-        <CssBaseline />
-        <Grid container
-          spacing={3}
-        >
-          <Grid item
-            xs={12}
-          >
-            <img
-              alt={'member'}
-              src={'https://hackernoon.com/hn-images/1*jFyawcsqoYctkTuZg6wQ1A.jpeg'}
-              style={{ height: 200, width: 1215 }}
-            />
-          </Grid>
-          <Grid item
-            xs={8}
-          >
-            <Typography component={'h1'}
-              variant={'h3'}
-            >
+      return (
+        <Container component="main">
+          <CssBaseline />
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <img style={{width:1215,height:200}} src="https://hackernoon.com/hn-images/1*jFyawcsqoYctkTuZg6wQ1A.jpeg"></img>
+            </Grid>
+            <Grid item xs={8}>
+            <Typography component="h1" variant="h3">
               {this.state.name}
             </Typography>
-            <Feed />
-          </Grid>
-          <Grid item
-            xs={4}
-          >
-            <Grid container
-              spacing={2}
-            >
-              <Grid item
-                xs={12}
-              >
-                <div className={useStyles.paper}>
-                  <b>Membros</b>
-                  <br />
-                  <p>{membersList}</p>
-                </div>
-              </Grid>
-              <Grid item
-                xs={12}
-              >
-                <div className={useStyles.paper}>
-                  <b>Description</b>
-                  <br />
-                  {this.state.descr}
-                  Calendário de Exames: shorturl.at/cfuDP (2019/2020)
-                  Material do Curso: https://goo.gl/Gd9r6c (dropbox)
-
-                  Regras de publicação: [CADEIRA] Conteúdo da publicação.
-                  "CADEIRA" a usar: Geral, Algebra, Analise, Calculo, EES, LI1, LI2, Logica, PF, PI, SC, TFM, TMD, AlgC,
-                  ArqC, CP, CD, Eletro, EE, EA, ISD, LI3, OpUM_Cadeira (Opção UMinho), POO, SO, BD, CG, CC, DSS, LI4,
-                  MNONL, MDIO, MEIO, PL, RC, SRCR, SD.
-                </div>
+              <Paper>
+                <TextField
+                  placeholder="What is in your mind?"
+                  multiline={true}
+                  rows={2}
+                  rowsMax={50}
+                  fullWidth
+                  margin="normal"
+                />
                 <Button
-                  color={'secondary'}
-                  onClick={this.exitGroup}
-                  variant={'contained'}
-                >
-                  Exit group
-                </Button>
+                  variant="contained"
+                  color="primary"
+                >Send</Button>
+              </Paper>
+              <Feed />
+            </Grid>
+            <Grid item xs={4}>
+              <Grid container spacing={2}>
+                <Grid item xs={12}>
+                  <div className={useStyles.paper}>
+                    <b>Members</b>
+                    <br/>
+                    <p>{members_list}</p>
+                  </div>
+                </Grid>
+                <Grid item xs={12}>
+                  <div className={useStyles.paper}>
+                    <b>Description</b>
+                    <br/>
+                    {this.state.descr}
+                    Calendário de Exames: shorturl.at/cfuDP (2019/2020)
+                    Material do Curso: https://goo.gl/Gd9r6c (dropbox)
+
+                    Regras de publicação: [CADEIRA] Conteúdo da publicação.
+                    "CADEIRA" a usar: Geral, Algebra, Analise, Calculo, EES, LI1, LI2, Logica, PF, PI, SC, TFM, TMD, AlgC, ArqC, CP, CD, Eletro, EE, EA, ISD, LI3, OpUM_Cadeira (Opção UMinho), POO, SO, BD, CG, CC, DSS, LI4, MNONL, MDIO, MEIO, PL, RC, SRCR, SD.
+                  </div>
+                  <Button
+                      variant="contained"
+                      color="secondary"
+                      onClick={this.exitGroup}
+                    >
+                      Exit group
+                    </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Grid>
-        </Grid>
-      </Container>
-    );
-  }
-
+        </Container>
+      );
+    }
 }
+
+
+
+
+
 
 export default Group;
