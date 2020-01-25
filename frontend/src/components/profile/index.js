@@ -7,7 +7,7 @@ import { useStyles, onChange } from '../index';
 
 import axios from 'axios'
 import config from '../../config'
-import SubmitFile from "../SubmitFile";
+import SubmitFile from "../submitfile/index";
 
 class Profile extends Component{
     constructor(props){

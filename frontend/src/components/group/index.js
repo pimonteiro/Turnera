@@ -1,5 +1,5 @@
 import React, { Component } from "react"
-import Feed from '../Feed/index'
+import Feed from '../feed/index'
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import Typography from "@material-ui/core/Typography";
