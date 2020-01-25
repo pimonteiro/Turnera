@@ -11,27 +11,19 @@ import Switch from 'react-bootstrap/cjs/Switch';
 
 export default class App extends React.Component {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      loggedIn: false,
-      userId: ''
-    };
-  }
-
   userLoggedIn = state => {
     // TODO: GET USER API AND VERIFY CREDENTIALS
     console.log(`${state.type} ${state.password} ${state.email}`);
 
-    this.setState({
-      loggedIn: true,
-      userId: 'dklafosdhfjlsdk-fsdrfoi2hr23'
-    });
+    localStorage.setItem('loggedIn', 'true');
+    localStorage.setItem('userId', '231mknj4-4hb23423');
+
+    this.setState({});
   };
 
   render() {
     return (
-      this.state.loggedIn ? <BrowserRouter>
+      localStorage.getItem('loggedIn') === 'true' ? <BrowserRouter>
         <Navbar />
         <Switch>
           <Route path={'/'}><Home /></Route>
