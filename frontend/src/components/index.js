@@ -1,7 +1,5 @@
 import { makeStyles } from '@material-ui/core/styles';
 
-export const URL = process.env.REACT_APP_API_HOST;
-
 export const useStyles = makeStyles(theme => ({
   avatar: {
     backgroundColor: theme.palette.secondary.main,
