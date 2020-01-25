@@ -1,54 +1,54 @@
-import React from "react";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Route } from "react-router-dom"
-import Navbar from "./components/navbar/bar";
-import Switch from "react-bootstrap/cjs/Switch";
-import Login from "./components/session/login";
-import Register from "./components/session/register";
-import Home from "./components/home";
+import { BrowserRouter, Route } from 'react-router-dom';
+import { Home } from './components/home';
 
-class App extends React.Component {
+import Group from './components/group';
+import Navbar from './components/navbar/bar';
+import Profile from './components/profile';
+import React from 'react';
+import Signin from './components/session/signin';
+import Signup from './components/session/signup';
+import Switch from 'react-bootstrap/cjs/Switch';
+
+export default class App extends React.Component {
+
   constructor(props) {
     super(props);
     this.state = {
       loggedIn: false,
-      userId: ""
+      userId: ''
     };
   }
 
-  userLoggedIn = (state) => {
-    console.log(`${state.type} ${state.password} ${state.email}`); // GET USER API AND VERIFY CREDENTIALS
+  userLoggedIn = state => {
+    // TODO: GET USER API AND VERIFY CREDENTIALS
+    console.log(`${state.type} ${state.password} ${state.email}`);
 
     this.setState({
       loggedIn: true,
-      userId: "dklafosdhfjlsdk-fsdrfoi2hr23"
+      userId: 'dklafosdhfjlsdk-fsdrfoi2hr23'
     });
   };
 
   render() {
     return (
-      this.state.loggedIn ?
-        <Router>
-          <Navbar />
-          <Switch>
-            <Route path="/">
-              <Home />
-            </Route>
-          </Switch>
-        </Router>
-      :
-        <Router>
-          <Switch>
-            <Route path="/">
-              <Login callback={this.userLoggedIn} />
-            </Route>
-            <Route path="/register">
-              <Register callback={this.userLoggedIn} />
-            </Route>
-          </Switch>
-        </Router>
+      this.state.loggedIn ? <BrowserRouter>
+        <Navbar />
+        <Switch>
+          <Route path={'/'}><Home /></Route>
+          <Route path={'/group/:group_id'}><Group /></Route>
+          <Route path={'/users/:user_id'}><Profile /></Route>
+        </Switch>
+      </BrowserRouter> : <BrowserRouter>
+        <Switch>
+          <Route path={'/'}>
+            <Signup callback={this.userLoggedIn} />
+          </Route>
+          <Route path={'/register'}>
+            <Signin callback={this.userLoggedIn} />
+          </Route>
+        </Switch>
+      </BrowserRouter>
     );
   }
-}
 
-export default App;
+}

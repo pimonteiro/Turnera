@@ -1,9 +1,8 @@
-import React from "react";
+import Feed from './feed';
+import React from 'react';
 
-export default class Home extends React.Component {
-  render() {
-    return (
-      <div><h1>Turnera</h1></div>
-    );
-  }
-}
+export const Home = () => {
+  return (
+    <Feed />
+  );
+};
