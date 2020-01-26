@@ -4,7 +4,7 @@ import { onChange, useStyles } from '../index';
 import Button from '@material-ui/core/Button';
 import Container from '@material-ui/core/Container';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Feed from '../posts/index';
+import Feed from '../posts';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 

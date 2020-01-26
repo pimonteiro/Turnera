@@ -2,7 +2,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { Home } from './components/home';
 
 import FriendRequests from './components/friend-requests';
-import Group from './components/group';
+import Group from './components/groups/show';
 import GroupList from './components/groups';
 import Navbar from './components/navbar/bar';
 import Post from './components/posts/show';
