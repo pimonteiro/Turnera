@@ -1,9 +1,8 @@
 import { Grid } from '@material-ui/core';
-import { MdSend } from 'react-icons/md';
+import { renderPosts } from './post-render';
 
 import CreatePost from './create-post';
 import React from 'react';
-import renderPost from './post-render';
 
 const posts = [
   {
@@ -32,7 +31,7 @@ const posts = [
   }
 ];
 
-export default class Feed extends React.Component {
+export default class Posts extends React.Component {
 
   constructor(props) {
     super(props);
@@ -43,25 +42,6 @@ export default class Feed extends React.Component {
       userId: props.userId
     };
   }
-
-  renderPosts = () => {
-    const renderedPosts = [];
-
-    if (this.state.posts.length === 0) {
-      renderedPosts.push(<h3>Sem publicações</h3>);
-    }
-
-    this.state.posts.forEach((post, index) =>
-      renderedPosts.push(
-        <div key={index}>
-          <a href={`/posts/${post.id}`}><MdSend size={'1.5em'} /></a>
-          { renderPost(post, index) }
-        </div>
-      )
-    );
-
-    return renderedPosts;
-  };
 
   render() {
     return (
@@ -75,7 +55,7 @@ export default class Feed extends React.Component {
           groupId={this.state.groupId}
           userId={this.state.userId}
         />
-        { this.renderPosts() }
+        { renderPosts(this.state.posts) }
       </Grid>
     );
   }

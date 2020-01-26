@@ -3,26 +3,22 @@ import { TextField } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import React from 'react';
-import _ from 'underscore';
 
-export default class CreatePost extends React.Component {
+export default class CreateComment extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      groupId: props.groupId,
-      newPostContent: '',
-      userId: props.userId
+      newCommentContent: '',
+      postId: props.postId
     };
   }
 
   submit = () => {
-    const text = this.state.newPostContent;
-    const hashtags = _.uniq(text.match(/(#[a-z\d-]+)/ig)) || [];
+    const text = this.state.newCommentContent;
 
     console.log(text);
-    console.log(hashtags);
   };
 
   render() {
@@ -36,13 +32,13 @@ export default class CreatePost extends React.Component {
           margin={'normal'}
           multiline
           onChange={e => this.setState({ newPostContent: e.target.value })}
-          placeholder={'Em que estás a pensar?'}
+          placeholder={'Escreve um comentário...'}
         />
         <Button
           color={'primary'}
           onClick={this.submit}
           variant={'contained'}
-        >Publicar</Button>
+        >Comentar</Button>
       </Box>
     );
   }
