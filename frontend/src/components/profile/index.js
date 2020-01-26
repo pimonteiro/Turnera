@@ -2,12 +2,12 @@ import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, D
   Grid, IconButton, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
 import { onChange, useStyles } from '../index';
+import { renderPosts } from '../posts/post-render';
 
 import React from 'react';
-import SubmitFile from '../submitfile/index';
+import SubmitFile from '../submit-file/index';
 import axios from 'axios';
 import config from '../../config';
-import renderPost from '../posts/post-render';
 
 const posts = [
   {
@@ -136,7 +136,7 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    const { userId } = this.props.match.params;
+    const userId = this.props.match.params.userId;
 
     onChange(this, userId, 'id');
     axios.get(`${config.apiURL}/users/${this.state.id}`)
@@ -152,22 +152,6 @@ class Profile extends React.Component {
         // This.props.history.push("/404")
       });
   }
-
-  renderPosts = () => {
-    const renderedPosts = [];
-
-    if (this.state.posts.length === 0) {
-      renderedPosts.push(<h3>Sem publicações</h3>);
-    }
-
-    this.state.posts.forEach((post, index) =>
-      renderedPosts.push(
-        renderPost(post, index)
-      )
-    );
-
-    return renderedPosts;
-  };
 
   render() {
     return (
@@ -272,6 +256,7 @@ class Profile extends React.Component {
                   color={'primary'}
                   fullWidth
                   onClick={this.changeDetails}
+                  style={{ marginTop: '20px' }}
                   variant={'contained'}
                 >
                         Update
@@ -285,7 +270,7 @@ class Profile extends React.Component {
           xs={9}
         >
           <div style={{ marginRight: '5%' }}>
-            { this.renderPosts() }
+            { renderPosts(this.state.posts) }
           </div>
         </Grid>
 

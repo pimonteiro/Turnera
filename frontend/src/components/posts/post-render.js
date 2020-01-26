@@ -1,5 +1,6 @@
-import { MdThumbUp } from 'react-icons/md';
+import { MdSend, MdThumbUp } from 'react-icons/md';
 
+import Avatar from '@material-ui/core/Avatar';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
 
@@ -15,7 +16,7 @@ function renderHashtags(hashtags) {
   return renderedHastags;
 }
 
-export default function renderPost(post, index) {
+export function renderPost(post, index) {
   return (
     <Card
       className={'mb-5'}
@@ -24,14 +25,14 @@ export default function renderPost(post, index) {
     >
       <Card.Body>
         <div style={{ display: 'inline-flex' }}>
-          <Card.Img
+          <Avatar
             alt={'user_image'}
             className={'my-3'}
             src={post.owner.image}
-            style={{ marginRight: '10px', maxHeight: '150px', maxWidth: '150px' }}
+            style={{ height: '100px', marginRight: '10px', width: '100px' }}
           />
           <a href={`/users/${post.owner.id}`}>
-            <Card.Text style={{ display: 'table-cell', height: '150px', verticalAlign: 'middle' }}>
+            <Card.Text style={{ display: 'table-cell', height: '120px', verticalAlign: 'middle' }}>
               { post.owner.name }
             </Card.Text>
           </a>
@@ -45,4 +46,23 @@ export default function renderPost(post, index) {
       </Card.Body>
     </Card>
   );
+}
+
+export function renderPosts(posts) {
+  const renderedPosts = [];
+
+  if (posts.length === 0) {
+    renderedPosts.push(<h3>Sem publicações</h3>);
+  }
+
+  posts.forEach((post, index) =>
+    renderedPosts.push(
+      <div key={index}>
+        <a href={`/posts/${post.id}`}><MdSend size={'1.5em'} /></a>
+        { renderPost(post, index) }
+      </div>
+    )
+  );
+
+  return renderedPosts;
 }

@@ -1,6 +1,7 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Home } from './components/home';
 
+import FriendRequests from './components/friend-requests';
 import Group from './components/group';
 import Navbar from './components/navbar/bar';
 import Post from './components/posts/show';
@@ -34,15 +35,20 @@ export default class App extends React.Component {
           />
           <Route
             component={Post}
-            path={'/posts/:post_id'}
+            path={'/posts/:postId'}
           />
           <Route
             component={Group}
-            path={'/group/:group_id'}
+            path={'/group/:groupId'}
           />
           <Route
             component={Profile}
-            path={'/users/:user_id'}
+            exact
+            path={'/users/:userId'}
+          />
+          <Route
+            component={FriendRequests}
+            path={'/users/:userId/friends-requests'}
           />
         </Switch>
       </BrowserRouter> : <BrowserRouter>

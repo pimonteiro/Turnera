@@ -40,7 +40,7 @@ class Group extends React.Component {
   }
 
   componentDidMount() {
-    const { groupId } = this.props.match.params;
+    const groupId = this.props.match.params.groupId;
 
     onChange(this, groupId, 'id');
     axios.get(`${config.apiURL}/groups/${this.state.id}`)
