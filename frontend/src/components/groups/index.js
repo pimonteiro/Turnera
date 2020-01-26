@@ -50,9 +50,9 @@ class GroupList extends Component {
     }
 
     removeGroup(){
-        axios.delete("link" + "/" + this.props.match.user_id + "/groups/" + this.state.remove_id)
+        axios.delete("link" + "/" + this.props.match.userId + "/groups/" + this.state.remove_id)
         .then(res => {
-            this.props.history.push("/" + this.props.match.user_id + "/groups")
+            this.props.history.push("/" + this.props.match.userId + "/groups")
         })
         .catch(res => {
             console.log(res)
@@ -71,7 +71,7 @@ class GroupList extends Component {
                     <Card style={{textAlign:"center"}}>
                         <CardContent>
                             <Typography color="textSecondary">
-                                <Link href={"/groups/" + g.id}>
+                                <Link href={"/" + this.props.match.userId + "/groups/" + g.id}>
                                     {g.name}
                                 </Link>
                             </Typography>

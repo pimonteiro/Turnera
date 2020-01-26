@@ -1,6 +1,8 @@
+import { Grid } from '@material-ui/core';
+import { renderPosts } from './post-render';
 
+import CreatePost from './create-post';
 import React from 'react';
-import renderPost from './postRender';
 
 const posts = [
   {
@@ -29,7 +31,7 @@ const posts = [
   }
 ];
 
-export default class Feed extends React.Component {
+export default class Posts extends React.Component {
 
   constructor(props) {
     super(props);
@@ -41,27 +43,20 @@ export default class Feed extends React.Component {
     };
   }
 
-  renderPosts = () => {
-    const renderedPosts = [];
-
-    if (this.state.posts.length === 0) {
-      renderedPosts.push(<h3>Sem publicações</h3>);
-    }
-
-    this.state.posts.forEach((post, index) =>
-      renderedPosts.push(
-        renderPost(post, index)
-      )
-    );
-
-    return renderedPosts;
-  };
-
   render() {
     return (
-      <div style={{ marginLeft: '23%' }}>
-        { this.renderPosts() }
-      </div>
+      <Grid
+        alignItems={'center'}
+        container
+        direction={'column'}
+        justify={'center'}
+      >
+        <CreatePost
+          groupId={this.state.groupId}
+          userId={this.state.userId}
+        />
+        { renderPosts(this.state.posts) }
+      </Grid>
     );
   }
 

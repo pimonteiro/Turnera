@@ -1,6 +1,7 @@
 import React, {Component} from 'react'
 import {Grid, Card, CardContent, CardActions, Button, Avatar, Link, Typography} from '@material-ui/core'
 import { makeStyles } from '@material-ui/core/styles';
+import axios from 'axios'
 
 const friends = [
     {
@@ -13,39 +14,39 @@ const friends = [
     }
 ]
 
-const friends_req = [
-    {
-        id: 5,
-        name: "Leonardo Silva"
-    }
-]
-
 class FriendList extends Component {
     constructor(props){
         super(props)
         this.state = {
             friends,
-            friends_req,
+            remove_id: ""
         }
+        this.removeFriend = this.removeFriend.bind(this)
     }
 
     getFriends(){
 
     }
 
-    getFriendsRequests(){
-
+    removeFriend(){
+        axios.delete("link" + "/users/" + this.props.match.userId + "/friends/" + this.state.remove_id)
+        .then(res => {
+            this.props.history.push("/" + this.props.match.userId + "/groups")
+        })
+        .catch(res => {
+            console.log(res)
+        })
     }
 
-    renderFriends(lst, msg){
+    renderFriends(){
         var newlist = []
-        if (lst.length === 0 ) {
-            newlist.push(<h3>{msg}</h3>);
+        if (friends.length === 0 ) {
+            newlist.push(<h3>Sem amigos.</h3>);
         }
       
-        lst.forEach((f, index) =>
+        friends.forEach((f, index) =>
             newlist.push(
-                <Grid item xs={1}>
+                <Grid item xs={6}>
                     <Card style={{textAlign:"center"}}>
                         <CardContent>
                             <Grid container style={{justifyContent:"center"}}>
@@ -62,7 +63,7 @@ class FriendList extends Component {
                             </Grid>
                         </CardContent>
                         <CardActions>
-                            <Button>Remove</Button>
+                            <Button onClick={this.removeFriend}>Remove</Button>
                         </CardActions>
                     </Card>
                 </Grid>
@@ -76,28 +77,12 @@ class FriendList extends Component {
     render() {
         return (
             <div>
-               <Grid container spacing={2}>
-                <Grid item xs={12}>
-                    <Typography component={'h1'}
-                            variant={'h3'}
-                        >
-                            Pedidos de Amizade
-                        </Typography>
-                        <Grid container spacing={2}>
-                            {this.renderFriends(this.state.friends_req, "Sem pedidos.")}
-                        </Grid>
-                   </Grid>
-                   <Grid item xs={12}>
-                    <Typography component={'h1'}
-                            variant={'h3'}
-                        >
-                            Amigos
-                        </Typography>
-                        <Grid container spacing={2}>
-                        {this.renderFriends(this.state.friends, "Sem amigos.")}
-                        </Grid>
-                   </Grid>
-               </Grid>
+                <Typography component={'h1'}
+                        variant={'h3'}
+                    >
+                        Amigos
+                </Typography>
+                {this.renderFriends()}
             </div>
         )
     }

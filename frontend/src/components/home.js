@@ -1,8 +1,8 @@
-import Feed from './posts';
+import Posts from './posts';
 import React from 'react';
 
 export const Home = () => {
   return (
-    <Feed />
+    <Posts />
   );
 };

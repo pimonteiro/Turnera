@@ -94,7 +94,7 @@ export default class Bar extends React.Component {
               inline
             >
               <FormControl className={'mr-sm-2 large'}
-                placeholder={'Search'}
+                placeholder={'Procura'}
                 type={'text'}
               />
               <Button
@@ -105,7 +105,7 @@ export default class Bar extends React.Component {
 
             <Nav className={'ml-auto mr-xl-5'}>
               <Nav.Link href={`/users/${this.state.id}`}><MdPerson size={40} /> {this.state.name}</Nav.Link>
-              <Nav.Link href={`/users/${this.state.id}/friends-request`}><MdGroupAdd size={40} /></Nav.Link>
+              <Nav.Link href={`/users/${this.state.id}/friends-requests`}><MdGroupAdd size={40} /></Nav.Link>
               <Nav.Link href={`/users/${this.state.id}/groups`}><MdGroup size={40} /></Nav.Link>
             </Nav>
           </Navbar>

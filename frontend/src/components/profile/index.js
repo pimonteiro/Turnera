@@ -1,13 +1,14 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  IconButton, MenuItem, Select, TextField, Typography, Paper, Grid } from '@material-ui/core';
+  Grid, IconButton, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
 import { onChange, useStyles } from '../index';
+import { renderPosts } from '../posts/post-render';
 
 import React from 'react';
-import SubmitFile from '../submitfile/index';
+import SubmitFile from '../submit-file/index';
 import axios from 'axios';
 import config from '../../config';
-import renderPost from '../posts/postRender';
+import FriendList from '../friends';
 
 const posts = [
   {
@@ -136,7 +137,7 @@ class Profile extends React.Component {
   }
 
   componentDidMount() {
-    const { userId } = this.props.match.params;
+    const userId = this.props.match.params.userId;
 
     onChange(this, userId, 'id');
     axios.get(`${config.apiURL}/users/${this.state.id}`)
@@ -153,30 +154,17 @@ class Profile extends React.Component {
       });
   }
 
-  renderPosts = () => {
-    const renderedPosts = [];
-
-    if (this.state.posts.length === 0) {
-      renderedPosts.push(<h3>Sem publicações</h3>);
-    }
-
-    this.state.posts.forEach((post, index) =>
-      renderedPosts.push(
-        renderPost(post, index)
-      )
-    );
-
-    return renderedPosts;
-  };
-
-
   render() {
     return (
       <Grid container>
-        <Grid item xs={3}>
-          <Container className={'pt-xl-5'}
-          component={'main'}
-          maxWidth={'xs'}
+        <Grid item
+          xs={3}
+        >
+          <Grid container spacing={2}>
+            <Grid item xs={12}>
+            <Container className={'pt-xl-5'}
+            component={'main'}
+            maxWidth={'xs'}
           >
             <CssBaseline />
             <div className={useStyles.paper}>
@@ -271,19 +259,26 @@ class Profile extends React.Component {
                   color={'primary'}
                   fullWidth
                   onClick={this.changeDetails}
+                  style={{ marginTop: '20px' }}
                   variant={'contained'}
                 >
                         Update
                 </Button>
               </form>
             </div>
-            </Container>
+          </Container>
+            </Grid>
+            <FriendList/>
           </Grid>
-          <Grid item xs={9} justify="center">
-            <div style={{ marginRight: '5%' }}>
-              { this.renderPosts() }
-            </div>
-          </Grid>
+        </Grid>
+        <Grid item
+          justify={'center'}
+          xs={9}
+        >
+          <div style={{ marginRight: '5%' }}>
+            { renderPosts(this.state.posts) }
+          </div>
+        </Grid>
 
       </Grid>
     );

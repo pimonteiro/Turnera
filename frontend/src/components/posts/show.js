@@ -1,7 +1,10 @@
+import { Grid } from '@material-ui/core';
+import { renderPost } from './post-render';
 
+import Avatar from '@material-ui/core/Avatar';
 import Card from 'react-bootstrap/Card';
+import CreateComment from './create-comment';
 import React from 'react';
-import renderPost from './postRender';
 
 const post = {
   group: '5700a8d1-fd10-4517-9c58-a6a7ae37f2b1',
@@ -11,15 +14,15 @@ const post = {
   owner: {
     id: '134dc87a-cb43-4943-931f-2f1eafc25309',
     image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-    name: 'João Vilaça'
+    name: 'Ricardo Vilaça'
   },
-  text: 'Post nº1'
+  text: 'És um burro Ricardo'
 };
 
 const comments = [
   {
     post: '687f0ab9-5089-45a9-99c7-e2e56fc9aa92',
-    text: 'you suck',
+    text: 'he sucks',
     user: {
       id: '134dc87a-cb43-4943-931f-2f1eafc25309',
       image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
@@ -28,7 +31,7 @@ const comments = [
   },
   {
     post: '687f0ab9-5089-45a9-99c7-e2e56fc9aa92',
-    text: 'you suck dickhead',
+    text: 'that dickhead',
     user: {
       id: '134dc87a-cb43-4943-931f-2f1eafc25309',
       image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
@@ -48,18 +51,6 @@ export default class Post extends React.Component {
     };
   }
 
-  renderHashtags = hashtags => {
-    const renderedHastags = [];
-
-    hashtags.forEach((hashtag, index) =>
-      renderedHastags.push(
-        <span key={index}>{`#${hashtag} `}</span>
-      )
-    );
-
-    return renderedHastags;
-  };
-
   renderComments = comments => {
     const renderedComments = [];
 
@@ -72,13 +63,13 @@ export default class Post extends React.Component {
         <Card
           className={'mb-5'}
           key={index}
-          style={{ fontSize: '20px', width: '80rem' }}
+          style={{ fontSize: '20px', marginLeft: '5rem', width: '75rem' }}
         >
           <Card.Body>
             <div style={{ display: 'inline-flex' }}>
-              <Card.Img
+              <Avatar
                 alt={'user_image'}
-                className={'my-3'}
+                className={'my-2'}
                 src={comment.user.image}
                 style={{ marginRight: '10px', maxHeight: '50px', maxWidth: '50px' }}
               />
@@ -101,10 +92,16 @@ export default class Post extends React.Component {
 
   render() {
     return (
-      <div style={{ marginLeft: '23%' }}>
+      <Grid
+        alignItems={'center'}
+        container
+        direction={'column'}
+        justify={'center'}
+      >
         { renderPost(this.state.post, 0) }
         { this.renderComments(this.state.comments) }
-      </div>
+        <CreateComment postId={this.state.post.id} />
+      </Grid>
     );
   }
 
