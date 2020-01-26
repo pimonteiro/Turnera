@@ -289,19 +289,23 @@ router.delete('/users/:id/friend-requests/:fid', (req, res, next) => {
     })
 });
 
-//                                  ----------------------- USERS/POSTs-----------------
+//                                  ----------------------- USERS/POSTS-----------------
 
-router.post('/users/:id/friend-requests/:fid', (req, res, next) => {
+router.post('/users/:id/posts', (req, res, next) => {
     var session = driver.session()
 
+    req.body.id = uuid4()
+    req.body.date = new Date().getTime()
+
     session.run(
-        "MATCH (u:User { id: $id }), (f:User { id: $fid }) \
-        CREATE (u)-[:friend_request]->(f) \
-        RETURN u",
-        { id: req.params.id, fid: req.params.fid }
+        "MATCH (u:User { id: $id }) \
+        CREATE (p:Post $post) \
+        CREATE (u)-[:post]->(p) \
+        RETURN p",
+        { id: req.params.id, post: req.body }
     )
     .then(data => {
-        res.jsonp(data.records[0].get('u').properties)
+        res.jsonp(data.records[0].get('p').properties)
     })
     .catch(err => {
         res.jsonp(err)
@@ -315,15 +319,97 @@ router.get('/users/:id/posts', (req, res, next) => {
     var session = driver.session()
 
     session.run(
-        "MATCH (u:User { id: $id })-[:post]-(p:Post), (p)-[r:Comment]-(a:User) RETURN p, a, r",
+        "MATCH (u:User { id: $id })-[:post]-(p:Post) RETURN p",
         { id: req.params.id }
     )
     .then(data => {
-        let comments = []
+        let ret = []
+
         data.records.forEach(record => {
-            console.log(record.get('r').properties.text)
+            ret.push(record.get('p').properties)
         })
-        res.jsonp({})
+
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.get('/users/:id/posts/:pid', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (p:Post { id: $pid })-[r]-(a) RETURN p, r, a",
+        { pid: req.params.pid }
+    )
+    .then(data => {
+        let ret = data.records[0].get('p').properties
+        ret.group = ''
+
+        let likes = []
+        let comments = []
+
+        data.records.forEach(record => {
+            if (record.get('r').type == 'post'){
+                if(record.get('a').labels[0] == 'User'){
+                    let owner = {}
+
+                    owner.name = record.get('a').properties.name
+                    owner.id = record.get('a').properties.id
+
+                    ret.owner = owner
+                }
+                else 
+                    ret.group = record.get('a').properties
+            }
+            else if (record.get('r').type == 'likes'){
+                let like = {}
+
+                like.name = record.get('a').properties.name
+                like.id = record.get('a').properties.id
+
+                likes.push(like)
+            }
+            else if (record.get('r').type == 'Comment'){
+                let comment = {}
+                let user = {}
+
+                comment.text = record.get('r').properties.text
+                user.name = record.get('a').properties.name
+                user.id = record.get('a').properties.id
+
+                comment.user = user
+
+                comments.push(comment)
+            }
+        })
+        ret.likes = likes
+        ret.comments = comments
+        
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.delete('/users/:id/posts/:pid', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (u:User { id: $id })-[:post]-(p:Post { id: $pid }) \
+        DETACH DELETE p",
+        { id: req.params.id, pid: req.params.pid }
+    )
+    .then(data => {
+        res.jsonp({'status': 'success'})
     })
     .catch(err => {
         res.jsonp(err)
@@ -409,6 +495,147 @@ router.put('/groups/:id', (req, res, next) => {
     )
     .then(data => {
         res.jsonp(data.records[0].get('g').properties)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+//                                  ----------------------- GROUPS/POSTS ---------------------------
+router.post('/groups/:id/posts', (req, res, next) => {
+    var session = driver.session()
+
+    req.body.id = uuid4()
+    req.body.date = new Date().getTime()
+
+    let uid = req.body.user
+    delete req.body.user
+
+    session.run(
+        "MATCH (u:User { id: $uid }), (g:Group { id: $gid }) \
+        CREATE (p:Post $post) \
+        CREATE (u)-[:post]->(p) \
+        CREATE (g)-[:post]->(p) \
+        RETURN p",
+        { gid: req.params.id, post: req.body, uid: uid }
+    )
+    .then(data => {
+        res.jsonp(data.records[0].get('p').properties)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.get('/groups/:id/posts', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (g:Group { id: $id })-[:post]-(p:Post), \
+        (u:User)-[:post]-(p) \
+        RETURN p, u",
+        { id: req.params.id }
+    )
+    .then(data => {
+        let ret = []
+
+        data.records.forEach(record => {
+            let post = record.get('p').properties
+            let user = {}
+
+            user.name = record.get('u').properties.name
+            user.id = record.get('u').properties.id
+
+            post.user = user
+
+            ret.push(post)
+        })
+
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.get('/groups/:id/posts/:pid', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (p:Post { id: $pid })-[r]-(a) RETURN p, r, a",
+        { pid: req.params.pid }
+    )
+    .then(data => {
+        let ret = data.records[0].get('p').properties
+        let likes = []
+        let comments = []
+
+        data.records.forEach(record => {
+            if (record.get('r').type == 'post'){
+                if(record.get('a').labels[0] == 'User'){
+                    let owner = {}
+
+                    owner.name = record.get('a').properties.name
+                    owner.id = record.get('a').properties.id
+
+                    ret.owner = owner
+                }
+                else 
+                    ret.group = record.get('a').properties
+            }
+            else if (record.get('r').type == 'likes'){
+                let like = {}
+
+                like.name = record.get('a').properties.name
+                like.id = record.get('a').properties.id
+
+                likes.push(like)
+            }
+            else if (record.get('r').type == 'Comment'){
+                let comment = {}
+                let user = {}
+
+                comment.text = record.get('r').properties.text
+                user.name = record.get('a').properties.name
+                user.id = record.get('a').properties.id
+
+                comment.user = user
+
+                comments.push(comment)
+            }
+        })
+        ret.likes = likes
+        ret.comments = comments
+        
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.delete('/groups/:id/posts/:pid', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (g:Group { id: $id })-[:post]-(p:Post { id: $pid }) \
+        DETACH DELETE p",
+        { id: req.params.id, pid: req.params.pid }
+    )
+    .then(data => {
+        res.jsonp({'status': 'success'})
     })
     .catch(err => {
         res.jsonp(err)
