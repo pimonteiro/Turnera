@@ -64,6 +64,7 @@ typings/
 
 # Output of 'npm pack'
 *.tgz
+!data.tgz
 
 # Yarn Integrity file
 .yarn-integrity
@@ -102,3 +103,5 @@ dist
 
 # TernJS port file
 .tern-port
+
+api/neo4j/data/*
