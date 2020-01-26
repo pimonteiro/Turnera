@@ -374,7 +374,7 @@ router.get('/users/:id/posts/:pid', (req, res, next) => {
 
                 likes.push(like)
             }
-            else if (record.get('r').type == 'Comment'){
+            else if (record.get('r').type == 'comment'){
                 let comment = {}
                 let user = {}
 
@@ -600,7 +600,7 @@ router.get('/groups/:id/posts/:pid', (req, res, next) => {
 
                 likes.push(like)
             }
-            else if (record.get('r').type == 'Comment'){
+            else if (record.get('r').type == 'comment'){
                 let comment = {}
                 let user = {}
 
