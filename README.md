@@ -40,4 +40,5 @@ Your social network of choice. *wink wink*
 /api/search
 	  /users POST
 	  /posts POST
+	  /groups POST
 ```
