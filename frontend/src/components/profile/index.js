@@ -4,6 +4,7 @@ import { PhotoCamera } from '@material-ui/icons';
 import { onChange, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 
+import FriendList from '../friends';
 import React from 'react';
 import SubmitFile from '../submit-file/index';
 import axios from 'axios';
@@ -159,111 +160,120 @@ class Profile extends React.Component {
         <Grid item
           xs={3}
         >
-          <Container className={'pt-xl-5'}
-            component={'main'}
-            maxWidth={'xs'}
+          <Grid container
+            spacing={2}
           >
-            <CssBaseline />
-            <div className={useStyles.paper}>
-              <Typography component={'h1'}
-                variant={'h3'}
+            <Grid item
+              xs={12}
+            >
+              <Container className={'pt-xl-5'}
+                component={'main'}
+                maxWidth={'xs'}
               >
-                        Profile
-              </Typography>
-              <div>
-                <img
-                  alt={'...'}
-                  className={'img-circle img-no-padding img-responsive'}
-                  src={'https://img.favpng.com/10/23/1/computer-icons-user-profile-avatar-png-favpng-ypy9BWih5X28x0zDEBeemwyx8.jpg'}
-                  style={{
-                    height: 200,
-                    width: 200
-                  }}
-                />
-                <div>
-                  <label htmlFor={'icon-button-file'}>
-                    <IconButton aria-label={'upload picture'}
-                      color={'primary'}
-                      component={'span'}
-                      onClick={() => onChange(this, true, 'open')}
-                    >
-                      <PhotoCamera />
-                    </IconButton>
-                  </label>
-                  <Dialog aria-labelledby={'form-dialog-title'}
-                    onClose={() => onChange(this, false, 'open')}
-                    open={this.state.open}
+                <CssBaseline />
+                <div className={useStyles.paper}>
+                  <Typography component={'h1'}
+                    variant={'h3'}
                   >
-                    <DialogTitle id={'form-dialog-title'}>Upload</DialogTitle>
-                    <DialogContent>
-                      <DialogContentText>
-                                    Upload image
-                      </DialogContentText>
-                      <SubmitFile link={'/....'}
-                        return={`/users/${this.id}`}
-                        type={'image'}
-                      />
-                    </DialogContent>
-                    <DialogActions>
-                      <Button color={'primary'}
-                        onClick={() => onChange(this, false, 'open')}
+                        Profile
+                  </Typography>
+                  <div>
+                    <img
+                      alt={'...'}
+                      className={'img-circle img-no-padding img-responsive'}
+                      src={'https://img.favpng.com/10/23/1/computer-icons-user-profile-avatar-png-favpng-ypy9BWih5X28x0zDEBeemwyx8.jpg'}
+                      style={{
+                        height: 200,
+                        width: 200
+                      }}
+                    />
+                    <div>
+                      <label htmlFor={'icon-button-file'}>
+                        <IconButton aria-label={'upload picture'}
+                          color={'primary'}
+                          component={'span'}
+                          onClick={() => onChange(this, true, 'open')}
+                        >
+                          <PhotoCamera />
+                        </IconButton>
+                      </label>
+                      <Dialog aria-labelledby={'form-dialog-title'}
+                        onClose={() => onChange(this, false, 'open')}
+                        open={this.state.open}
                       >
+                        <DialogTitle id={'form-dialog-title'}>Upload</DialogTitle>
+                        <DialogContent>
+                          <DialogContentText>
+                                    Upload image
+                          </DialogContentText>
+                          <SubmitFile link={'/....'}
+                            return={`/users/${this.id}`}
+                            type={'image'}
+                          />
+                        </DialogContent>
+                        <DialogActions>
+                          <Button color={'primary'}
+                            onClick={() => onChange(this, false, 'open')}
+                          >
                                     Cancel
-                      </Button>
-                    </DialogActions>
-                  </Dialog>
-                </div>
-              </div>
-              <form className={useStyles.form}
-                noValidate
-              >
-                <TextField autoComplete={'email'}
-                  autoFocus
-                  disabled={'true'}
-                  fullWidth
-                  id={'email'}
-                  label={'Email Address'}
-                  margin={'normal'}
-                  name={'email'}
-                  value={this.state.data.email}
-                  variant={'outlined'}
-                />
-                <TextField fullWidth
-                  id={'name'}
-                  label={'Name'}
-                  margin={'normal'}
-                  name={'name'}
-                  onChange={({ target: { value } }) => onChange(this, value, 'data.name.after')}
-                  type={'text'}
-                  value={this.state.data.name.after}
-                  variant={'outlined'}
-                />
-                <Select
-                  fullWidth
-                  id={'gender'}
-                  label={'Gender'}
-                  margin={'normal'}
-                  name={'gender'}
-                  onChange={({ target: { value } }) => onChange(this, value, 'data.gender.after')}
-                  value={this.state.data.gender.after}
-                  variant={'outlined'}
-                >
-                  <MenuItem value={'Female'}>Female</MenuItem>
-                  <MenuItem value={'Male'}>Male</MenuItem>
-                  <MenuItem value={'Unknown'}>Unknown</MenuItem>
-                </Select>
-                <Button className={useStyles.submit}
-                  color={'primary'}
-                  fullWidth
-                  onClick={this.changeDetails}
-                  style={{ marginTop: '20px' }}
-                  variant={'contained'}
-                >
+                          </Button>
+                        </DialogActions>
+                      </Dialog>
+                    </div>
+                  </div>
+                  <form className={useStyles.form}
+                    noValidate
+                  >
+                    <TextField autoComplete={'email'}
+                      autoFocus
+                      disabled={'true'}
+                      fullWidth
+                      id={'email'}
+                      label={'Email Address'}
+                      margin={'normal'}
+                      name={'email'}
+                      value={this.state.data.email}
+                      variant={'outlined'}
+                    />
+                    <TextField fullWidth
+                      id={'name'}
+                      label={'Name'}
+                      margin={'normal'}
+                      name={'name'}
+                      onChange={({ target: { value } }) => onChange(this, value, 'data.name.after')}
+                      type={'text'}
+                      value={this.state.data.name.after}
+                      variant={'outlined'}
+                    />
+                    <Select
+                      fullWidth
+                      id={'gender'}
+                      label={'Gender'}
+                      margin={'normal'}
+                      name={'gender'}
+                      onChange={({ target: { value } }) => onChange(this, value, 'data.gender.after')}
+                      value={this.state.data.gender.after}
+                      variant={'outlined'}
+                    >
+                      <MenuItem value={'Female'}>Female</MenuItem>
+                      <MenuItem value={'Male'}>Male</MenuItem>
+                      <MenuItem value={'Unknown'}>Unknown</MenuItem>
+                    </Select>
+                    <Button className={useStyles.submit}
+                      color={'primary'}
+                      fullWidth
+                      onClick={this.changeDetails}
+                      style={{ marginTop: '20px' }}
+                      variant={'contained'}
+                    >
                         Update
-                </Button>
-              </form>
-            </div>
-          </Container>
+                    </Button>
+                  </form>
+                </div>
+              </Container>
+            </Grid>
+            <FriendList />
+          </Grid>
         </Grid>
         <Grid item
           justify={'center'}
