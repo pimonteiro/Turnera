@@ -8,7 +8,8 @@ uri = "bolt://localhost"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "admin"))
 
 def str_time_prop(start, end, format, prop):
-    """Get a time at a proportion of a range of two formatted times.
+    """
+    Get a time at a proportion of a range of two formatted times.
 
     start and end should be strings specifying times formated in the
     given format (strftime-style), giving an interval [start, end].
@@ -238,10 +239,10 @@ def create_comments():
             tx.commit()
 
 
-#create_cities()
-#create_users()
-#create_groups()
-#create_friendship()
-#create_friend_request()
-#create_posts()
-#create_comments()
+create_cities()
+create_users()
+create_groups()
+create_friendship()
+create_friend_request()
+create_posts()
+create_comments()
