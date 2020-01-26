@@ -689,4 +689,87 @@ router.post('/posts/:id/like', (req, res, next) => {
     })
 });
 
+//                                  ----------------------- SEARCH ---------------------------
+router.post('/search/users', (req, res, next) => {
+    var session = driver.session()
+
+    if (!req.body.name)
+        req.body.name = ""
+
+    if (!req.body.email)
+        req.body.email = ""
+
+    session.run(
+        "MATCH (u:User) WHERE toLower(u.name) CONTAINS toLower($name) \
+        AND toLower(u.email) CONTAINS toLower($email) \
+        RETURN u",
+        { email: req.body.email, name: req.body.name}
+    )
+    .then(data => {
+        let ret = []
+
+        data.records.forEach(record => {
+            ret.push(record.get('u').properties)
+        })
+
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.post('/search/posts', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (p:Post) WHERE toLower(p.text) CONTAINS toLower($text) \
+        RETURN p",
+        { text: req.body.text }
+    )
+    .then(data => {
+        let ret = []
+
+        data.records.forEach(record => {
+            ret.push(record.get('p').properties)
+        })
+
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.post('/search/groups', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (g:Group) WHERE toLower(g.name) CONTAINS toLower($name) \
+        RETURN g",
+        { name: req.body.name }
+    )
+    .then(data => {
+        let ret = []
+
+        data.records.forEach(record => {
+            ret.push(record.get('g').properties)
+        })
+
+        res.jsonp(ret)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
 module.exports = router;
