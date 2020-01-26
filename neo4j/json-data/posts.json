@@ -5,7 +5,8 @@
         "hashtags": ["post","teste","daw"],
         "owner": "d83b49b9-9cd0-4235-b145-efb790741832",
         "group": "5700a8d1-fd10-4517-9c58-a6a7ae37f2b1",
-        "likes": []
+        "likes": [],
+        "images": ["https://storage.googleapis.com/turnera_images/Screenshot%20from%202020-01-24%2012-38-37.png"]
     },
     {
         "id": "c9e72ecf-8e3a-4893-b823-2158b1f3bff0",
@@ -21,7 +22,8 @@
         "hashtags": [],
         "owner": "e88bb287-359d-4d2a-a4b8-5f719dd332e2",
         "group": "bc283d3f-c87d-4e05-afcc-92d04d67deec",
-        "likes": ["ca3def28-89f2-4d31-b51b-84ac4a9b5c98","84c6bfdc-815a-4e2d-83ae-f171fec925d3", "34c24e0c-0853-43aa-acf4-fd0d6b94cd64", "c140a18c-d857-4b8d-b933-8ef084f1372a", "7b80d01a-c56a-4be5-a4be-d51bcd69b009"]
+        "likes": ["ca3def28-89f2-4d31-b51b-84ac4a9b5c98","84c6bfdc-815a-4e2d-83ae-f171fec925d3", "34c24e0c-0853-43aa-acf4-fd0d6b94cd64", "c140a18c-d857-4b8d-b933-8ef084f1372a", "7b80d01a-c56a-4be5-a4be-d51bcd69b009"],
+        "images": ["https://storage.googleapis.com/turnera_images/cb5cdf46023ff2c741b16d9a1fc2804e37f63fc1.webp"]
     },
     {
         "id": "52933be8-86ec-4b46-8f87-cb46e8f6dfbb",
@@ -29,7 +31,8 @@
         "hashtags": ["debug","neo4j"],
         "owner": "23e97763-13fd-479a-a406-d304e2c13b13",
         "group": "732593e8-0bab-441f-9d09-f98f4588aa7f",
-        "likes": ["e0d7414e-30fd-4c62-a125-723e89dc760c", "a5a512dd-03a7-4826-a917-a7ce21159640", "eb52bd3b-3357-47ff-a12b-539a0de83f2f", "b390622d-9a80-4b9e-91bf-2e5347983edc", "d7355b89-5b63-4ca0-82df-8c036eb1c10a", "c63bc012-babc-4f49-9e0b-1225d24c93e3", "f5e35442-dfc4-4bd9-95eb-0d240e6936ff"]
+        "likes": ["e0d7414e-30fd-4c62-a125-723e89dc760c", "a5a512dd-03a7-4826-a917-a7ce21159640", "eb52bd3b-3357-47ff-a12b-539a0de83f2f", "b390622d-9a80-4b9e-91bf-2e5347983edc", "d7355b89-5b63-4ca0-82df-8c036eb1c10a", "c63bc012-babc-4f49-9e0b-1225d24c93e3", "f5e35442-dfc4-4bd9-95eb-0d240e6936ff"],
+        "images": ["https://storage.googleapis.com/turnera_images/1_nnynnz_dKS2E2guV_iP-0w.jpeg"]
     },
     {
         "id": "a5f26636-e67b-4ce3-8911-1c22ad9410ee",
@@ -37,7 +40,8 @@
         "hashtags": ["gaming","working"],
         "owner": "1851f102-4114-40ef-8c48-0dd1c265a1f2",
         "group": "732593e8-0bab-441f-9d09-f98f4588aa7f",
-        "likes": ["23e97763-13fd-479a-a406-d304e2c13b13", "cfadecd3-0135-4711-a54b-ef71e50966f7", "dbddca5e-1adc-4108-b925-de8572c5d507", "3185cc7f-141c-480c-8cef-65d1cc5240ea", "97cd5492-d774-4ffc-b81d-98ca6caec1fa", "3a08befe-0a5c-473c-be0b-4ef24c818937", "c53cc093-e693-4ba1-8681-cfd3675d95e9", "e48bd438-c0e3-45c4-a68e-1bb60be7ecac", "6c146aa4-9a43-4759-9329-22fe8ea7db4e", "1851f102-4114-40ef-8c48-0dd1c265a1f2", "9bf13052-352e-458e-b0c9-326029bf49a0", "b0fbb7ab-dba7-4dc5-aac6-b57903ca118b", "dd12728b-93fa-4452-a84e-e10fdab7d121", "137715a5-179f-4266-8b6e-85aa192be4ab", "91246ffd-3780-4111-8026-91f0e0639660", "4ba79a2f-c4de-4bb2-8851-dc95c8fd80f3", "096f347e-b0f3-4fa0-bca6-e4005e0ab9eb", "57ce04a7-b236-4f3f-9450-fc0ebf81ab55", "bacede4d-7121-4e28-a196-46f1abde4735", "af8917a0-7007-4884-93b2-76caa2d45f91"]
+        "likes": ["23e97763-13fd-479a-a406-d304e2c13b13", "cfadecd3-0135-4711-a54b-ef71e50966f7", "dbddca5e-1adc-4108-b925-de8572c5d507", "3185cc7f-141c-480c-8cef-65d1cc5240ea", "97cd5492-d774-4ffc-b81d-98ca6caec1fa", "3a08befe-0a5c-473c-be0b-4ef24c818937", "c53cc093-e693-4ba1-8681-cfd3675d95e9", "e48bd438-c0e3-45c4-a68e-1bb60be7ecac", "6c146aa4-9a43-4759-9329-22fe8ea7db4e", "1851f102-4114-40ef-8c48-0dd1c265a1f2", "9bf13052-352e-458e-b0c9-326029bf49a0", "b0fbb7ab-dba7-4dc5-aac6-b57903ca118b", "dd12728b-93fa-4452-a84e-e10fdab7d121", "137715a5-179f-4266-8b6e-85aa192be4ab", "91246ffd-3780-4111-8026-91f0e0639660", "4ba79a2f-c4de-4bb2-8851-dc95c8fd80f3", "096f347e-b0f3-4fa0-bca6-e4005e0ab9eb", "57ce04a7-b236-4f3f-9450-fc0ebf81ab55", "bacede4d-7121-4e28-a196-46f1abde4735", "af8917a0-7007-4884-93b2-76caa2d45f91"],
+        "images": ["https://storage.googleapis.com/turnera_images/apps.13476.14203868070568856.386fecb0-7986-421a-b476-a8fdebcf2950.png"]
     },
     {
         "id": "72f21669-8465-466a-9df0-45130ec8f04d",
@@ -45,6 +49,7 @@
         "hashtags": ["game","anime"],
         "owner": "ca22997a-9a87-4325-896b-7637359667fd",
         "group": "43a9d8e2-463d-4030-bfcc-6c3a4f07dc69",
-        "likes": []
+        "likes": [],
+        "images": ["https://storage.googleapis.com/turnera_images/benefits-of-gaming.jpeg"]
     }
 ]

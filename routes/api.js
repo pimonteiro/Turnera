@@ -645,4 +645,48 @@ router.delete('/groups/:id/posts/:pid', (req, res, next) => {
     })
 });
 
+//                                  ----------------------- POSTS ---------------------------
+router.post('/posts/:id/like', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (p:Post { id: $pid }), (u:User { id: $uid}) \
+        CREATE (u)-[:likes]->(p)",
+        { pid: req.params.pid, uid: req.body.user }
+    )
+    .then(data => {
+        res.jsonp({ 'status': 'success' })
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
+router.post('/posts/:id/like', (req, res, next) => {
+    var session = driver.session()
+
+    session.run(
+        "MATCH (p:Post { id: $pid }), (u:User { id: $uid}) \
+        CREATE (u)-[r:comment { text: $text, date: $date }]->(p) \
+        RETURN r",
+        { 
+            pid: req.params.pid, 
+            uid: req.body.user, 
+            text: req.body.text,
+            date: new Date().getTime() 
+        })
+    .then(data => {
+        res.jsonp(data.records[0].get('r').properties)
+    })
+    .catch(err => {
+        res.jsonp(err)
+    })
+    .then(() => {
+        session.close()
+    })
+});
+
 module.exports = router;

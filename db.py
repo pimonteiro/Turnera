@@ -1,9 +1,32 @@
 import json
 import uuid
+import random
+import time
 from neo4j import GraphDatabase
 
 uri = "bolt://localhost"
 driver = GraphDatabase.driver(uri, auth=("neo4j", "admin"))
+
+def str_time_prop(start, end, format, prop):
+    """Get a time at a proportion of a range of two formatted times.
+
+    start and end should be strings specifying times formated in the
+    given format (strftime-style), giving an interval [start, end].
+    prop specifies how a proportion of the interval to be taken after
+    start.  The returned time will be in the specified format.
+    """
+
+    stime = time.mktime(time.strptime(start, format))
+    etime = time.mktime(time.strptime(end, format))
+
+    ptime = stime + prop * (etime - stime)
+
+    return time.strftime(format, time.localtime(ptime))
+
+
+def random_date(start, end, prop):
+    return str_time_prop(start, end, '%d/%m/%Y', prop)
+
 
 def create_city(tx, city):
     tx.run(
@@ -42,7 +65,8 @@ def create_user(tx, user):
             id: $id, 
             email: $email, 
             gender: $gender, 
-            name: $name 
+            name: $name,
+            date: $date 
             })
         CREATE (user)-[:lives_in]->(lives_in)
         CREATE (user)-[:home_town]->(home_town)
@@ -53,7 +77,8 @@ def create_user(tx, user):
         gender = user['gender'],
         id = user['id'],
         ht_id = user['home_town'],
-        liv_id = user['lives_in']
+        liv_id = user['lives_in'],
+        date = random_date("1/1/1970", "30/12/2009", random.random())
     )
 
 def create_group(tx, group):
@@ -171,7 +196,7 @@ def create_posts():
                 for line in match_list:
                     query += line
 
-                query += "CREATE (post:Post {id: $id, text: $text, hashtags: $hashtags})\n"
+                query += "CREATE (post:Post {id: $id, text: $text, hashtags: $hashtags, images: $images, date: $date})\n"
 
                 create_list.append(create_owner)
 
@@ -185,7 +210,9 @@ def create_posts():
                     query,
                     text = post['text'],
                     id = post['id'],
-                    hashtags = post['hashtags']
+                    hashtags = post['hashtags'],
+                    images = post['images'],
+                    date = random_date("1/1/2015", "30/12/2019", random.random())
                 )
 
             tx.commit()

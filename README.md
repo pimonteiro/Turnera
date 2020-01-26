@@ -37,6 +37,12 @@ Your social network of choice. *wink wink*
 	  / GET POST
 	  /:post_id GET DELETE 
 
+/api/posts/:post_id/like
+	  / POST
+
+/api/posts/:post_id/comment
+	  / POST
+
 /api/search
 	  /users POST
 	  /posts POST
