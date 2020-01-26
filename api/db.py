@@ -238,6 +238,22 @@ def create_comments():
             tx.commit()
 
 
+def create_constraint():
+    with driver.session() as session:
+        tx = session.begin_transaction()
+        tx.run(
+            """
+            CREATE CONSTRAINT ON (n:User) ASSERT n.id IS UNIQUE
+            CREATE CONSTRAINT ON (n:City) ASSERT n.id IS UNIQUE
+            CREATE CONSTRAINT ON (n:Post) ASSERT n.id IS UNIQUE
+            CREATE CONSTRAINT ON (n:Group) ASSERT n.id IS UNIQUE
+            """
+        )
+        tx.commit()
+
+
+
+create_constraint()
 create_cities()
 create_users()
 create_groups()

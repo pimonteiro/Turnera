@@ -6,7 +6,7 @@ services:
     - 7474:7474
     - 7687:7687
     volumes:
-    - ${PWD}/neo4j/data:/data
+    - ${PWD}/api/neo4j/data:/data
     environment: 
       NEO4J_AUTH: neo4j/admin
       
