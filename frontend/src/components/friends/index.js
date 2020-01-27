@@ -26,7 +26,7 @@ class FriendList extends React.Component {
   }
 
   removeFriend() {
-    axios.delete(`link/users/${this.props.match.userId}/friends/${this.state.remove_id}`)
+    axios.delete(`api/users/${this.props.match.userId}/friends/${this.state.remove_id}`)
       .then(() => {
         this.props.history.push(`/${this.props.match.userId}/groups`);
       })
@@ -46,7 +46,7 @@ class FriendList extends React.Component {
       newlist.push(
         <Grid item
           key={index}
-          xs={6}
+          xs={1}
         >
           <Card style={{ textAlign: 'center' }}>
             <CardContent>
@@ -83,12 +83,17 @@ class FriendList extends React.Component {
   render() {
     return (
       <div>
-        <Typography component={'h1'}
-          variant={'h3'}
-        >
-                        Amigos
-        </Typography>
-        {this.renderFriends()}
+        <Grid container spacing={1}>
+          <Grid item xs={12}>
+            <Typography component={'h1'}
+              variant={'h3'}
+            >
+                            Amigos
+            </Typography>
+            <br/>
+          </Grid>
+          {this.renderFriends()}
+        </Grid>
       </div>
     );
   }

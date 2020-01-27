@@ -1,10 +1,9 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Grid, IconButton, MenuItem, Select, TextField, Typography } from '@material-ui/core';
+  Grid, IconButton, MenuItem, Select, TextField, Typography, Link } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
 import { onChange, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 
-import FriendList from '../friends';
 import React from 'react';
 import SubmitFile from '../submit-file/index';
 import axios from 'axios';
@@ -270,9 +269,14 @@ class Profile extends React.Component {
                     </Button>
                   </form>
                 </div>
+                <br/>
+                  <Link href={"/users/" + this.props.match.userId + "/friends"}>
+                      <Button justify={'center'} width={50} variant={'contained'} color={'secundary'}>Amigos</Button>
+                  </Link>
               </Container>
             </Grid>
-            <FriendList />
+            <Grid item xs={12} alignItems={'center'}>
+            </Grid>
           </Grid>
         </Grid>
         <Grid item
