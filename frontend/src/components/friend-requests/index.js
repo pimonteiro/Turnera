@@ -1,7 +1,10 @@
 import Avatar from '@material-ui/core/Avatar';
 import Card from 'react-bootstrap/Card';
 import Grid from '@material-ui/core/Grid';
+import Button from '@material-ui/core/Button';
 import React from 'react';
+import { getResource, createResource } from '../api-handler';
+import {onChange} from '../index'
 
 const friendRequests = [
   {
@@ -39,6 +42,31 @@ export default class FriendRequests extends React.Component {
       friendRequests,
       userId: props.match.params.userId
     };
+    this.acceptFriend = this.acceptFriend.bind(this)
+  }
+
+  getFriendRequests = async () => {
+    return await getResource(`users/${this.state.userId}/friend-requests`)
+  }
+
+  acceptFriend = friend => {
+    createResource(`users/${friend.invited}/friend-requests/${friend.user.id}`)
+      .then(() => {
+        this.props.history.push(`/users/${friend.invited}/friend-requests`)
+      })
+      .catch(res => {
+        console.log(res)
+      })
+  }
+
+  componentDidMount(){
+    this.getFriendRequests()
+      .then(res => {
+        onChange(this, res.data, 'friendRequests')
+      })
+      .catch(res => {
+        console.log(res)
+      })
   }
 
   renderFriendRequests() {
@@ -65,11 +93,10 @@ export default class FriendRequests extends React.Component {
                   </Card.Text>
                 </a>
                 <a
-                  href={`/users/${friendRequest.invited}/friend-requests/${friendRequest.user.id}`}
                   style={{ marginLeft: '80%', position: 'absolute' }}
                 >
                   <Card.Text style={{ display: 'table-cell', height: '120px', verticalAlign: 'middle' }}>
-                    Aceitar
+                    <Button onClick={this.acceptFriend(friendRequest)}>Aceitar</Button>
                   </Card.Text>
                 </a>
               </div>
