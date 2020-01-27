@@ -3,6 +3,8 @@ import { deleteResource, getResource } from '../api-handler';
 import { onChange } from '..';
 
 import React from 'react';
+import { getResource, deleteResource } from '../api-handler';
+import { onChange } from '..';
 
 class FriendList extends React.Component {
 
@@ -21,8 +23,8 @@ class FriendList extends React.Component {
 
   removeFriend(ind) {
     deleteResource(`users/${this.state.userId}/friends/${ind}`)
-      .then(() => {
-        this.props.history.push(`/${this.state.userId}/friends`);
+      .then(res => {
+        this.props.history.push(`/users/${this.state.userId}/friends`);
       })
       .catch(res => {
         console.log(res);
@@ -70,7 +72,7 @@ class FriendList extends React.Component {
               </Grid>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeFriend(index)}>Remove</Button>
+              <Button onClick={this.removeFriend}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>

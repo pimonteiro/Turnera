@@ -14,11 +14,6 @@ class Profile extends React.Component {
     super(props);
 
     this.state = {
-      data: {
-        email: '',
-        gender: '',
-        name: ''
-      },
       open: false,
       posts: [],
       user: {},
@@ -43,8 +38,7 @@ class Profile extends React.Component {
   changeDetails() {
     updateResource(`users/${this.state.userId}/`, { name: this.state.data.name, gender: this.state.data.gender })
       .then(() => {
-        onChange(this, this.state.data.name, 'data.name');
-        onChange(this, this.state.data.gender, 'data.gender');
+        console.log("Done")
       })
       .catch(res => {
         console.log(`Could not change details: ${res}`);
@@ -142,30 +136,30 @@ class Profile extends React.Component {
                       label={'Email Address'}
                       margin={'normal'}
                       name={'email'}
-                      value={this.state.data.email}
+                      value={this.state.user.email}
                       variant={'outlined'}
                     />
                     <TextField
-                      defaultValue={this.state.data.name}
+                      defaultValue={this.state.user.name}
                       fullWidth
                       id={'name'}
                       label={'Name'}
                       margin={'normal'}
                       name={'name'}
-                      onChange={({ target: { value } }) => onChange(this, value, 'data.name')}
+                      onChange={({ target: { value } }) => onChange(this, value, 'user.name')}
                       type={'text'}
                       variant={'outlined'}
                     />
                     <Select
-                      defaultValue={this.state.data.gender}
+                      value={this.state.user.gender}
                       fullWidth
                       id={'gender'}
                       label={'Gender'}
                       name={'gender'}
-                      onChange={({ target: { value } }) => onChange(this, value, 'data.gender')}
+                      onChange={({ target: { value } }) => onChange(this, value, 'user.gender')}
                       variant={'outlined'}
                     >
-                      <MenuItem value={'Female'}>Female</MenuItem>
+                      <MenuItem value={`Female`}>Female</MenuItem>
                       <MenuItem value={'Male'}>Male</MenuItem>
                       <MenuItem value={'Unknown'}>Unknown</MenuItem>
                     </Select>

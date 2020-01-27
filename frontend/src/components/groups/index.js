@@ -16,7 +16,6 @@ class GroupList extends React.Component {
   }
 
   removeGroup = async (ind) => {
-    console.log("Group to remove: " + ind)
     this.props.history.push(`/users/${this.state.userId}/groups`)
     return await deleteResource(`users/${this.state.userId}/groups/${ind}`)
   }
@@ -42,7 +41,7 @@ class GroupList extends React.Component {
       newlist.push(
         <Grid item
           key={index}
-          xs={1}
+          xs={8}
         >
           <Card style={{ textAlign: 'center' }}>
             <CardContent>
@@ -53,7 +52,7 @@ class GroupList extends React.Component {
               </Typography>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeGroup(index)}>Remove</Button>
+              <Button onClick={this.removeGroup}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>
@@ -78,12 +77,9 @@ class GroupList extends React.Component {
                             Grupos
             </Typography>
             <br/>
-            <Grid container
-              spacing={2}
-            >
-              {this.renderGroups()}
             </Grid>
-          </Grid>
+              {this.renderGroups()}
+
         </Grid>
       </div>
     );

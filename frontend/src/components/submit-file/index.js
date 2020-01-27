@@ -3,9 +3,7 @@ import { onChange } from '../index';
 import Button from '@material-ui/core/Button';
 import React from 'react';
 
-import axios from 'axios';
-import config from '../../config';
-
+import {createResource} from '../api-handler'
 class SubmitFile extends React.Component {
 
   constructor(props) {
@@ -18,7 +16,7 @@ class SubmitFile extends React.Component {
   }
 
     sendFile = () => {
-      axios.post(config.apiURL + this.props.link)
+      createResource(`/linkmissing`)
         .then(() => {
           this.props.history.push(this.props.return);
         })

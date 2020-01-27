@@ -6,40 +6,13 @@ import React from 'react';
 import { getResource, createResource } from '../api-handler';
 import {onChange} from '../index'
 
-const friendRequests = [
-  {
-    invited: '493d5869-d0a7-4335-bed3-d68cb1a2aa6f',
-    user: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'Márcia Filipa'
-    }
-  },
-  {
-    invited: '493d5869-d0a7-4335-bed3-d68cb1a2aa6f',
-    user: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'Filipe Monterio'
-    }
-  },
-  {
-    invited: '493d5869-d0a7-4335-bed3-d68cb1a2aa6f',
-    user: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'Leonardo Neri'
-    }
-  }
-];
-
 export default class FriendRequests extends React.Component {
 
   constructor(props) {
     super(props);
 
     this.state = {
-      friendRequests,
+      friendRequests: [],
       userId: props.match.params.userId
     };
     this.acceptFriend = this.acceptFriend.bind(this)
@@ -52,7 +25,7 @@ export default class FriendRequests extends React.Component {
   acceptFriend = friend => {
     createResource(`users/${friend.invited}/friend-requests/${friend.user.id}`)
       .then(() => {
-        this.props.history.push(`/users/${friend.invited}/friend-requests`)
+        this.props.history.push(`/users/${this.state.userId}/friends-requests`)
       })
       .catch(res => {
         console.log(res)
@@ -84,19 +57,19 @@ export default class FriendRequests extends React.Component {
                 <Avatar
                   alt={'user_image'}
                   className={'my-3'}
-                  src={friendRequest.user.image}
+                  //src={friendRequest.user.image}
                   style={{ height: '100px', marginRight: '10px', width: '100px' }}
                 />
-                <a href={`/users/${friendRequest.user.id}`}>
+                <a href={`/users/${friendRequest.id}`}>
                   <Card.Text style={{ display: 'table-cell', height: '120px', verticalAlign: 'middle' }}>
-                    { friendRequest.user.name }
+                    { friendRequest.name }
                   </Card.Text>
                 </a>
                 <a
                   style={{ marginLeft: '80%', position: 'absolute' }}
                 >
                   <Card.Text style={{ display: 'table-cell', height: '120px', verticalAlign: 'middle' }}>
-                    <Button onClick={this.acceptFriend(friendRequest)}>Aceitar</Button>
+                    <Button onClick={this.acceptFriend}>Aceitar</Button>
                   </Card.Text>
                 </a>
               </div>

@@ -34,7 +34,7 @@ class Group extends React.Component {
   }
 
   getGroup = async () => {
-    return await getResource(`users/${this.state.userId}/groups/${this.state.groupId}`)  
+    return await getResource(`groups/${this.state.groupId}`)  
   }
 
   componentDidMount() {
@@ -48,13 +48,21 @@ class Group extends React.Component {
       })
   }
 
-  render() {
+  renderMembers(){
     const membersList = [];
 
-    this.state.members.forEach(element => {
-      membersList.push(<a href={'linktomember'}>{element} </a>);
+    if(this.state.group.members.length === 0){
+      membersList.push("Sem membros.")
+    }
+    
+    this.state.group.members.forEach(element => {
+      membersList.push(<a href={`/users/${element.id}`}>Temp </a>);
     });
 
+    return membersList
+  }
+
+  render() {
     return (
       <Container component={'main'}>
         <CssBaseline />
@@ -76,22 +84,8 @@ class Group extends React.Component {
             <Typography component={'h1'}
               variant={'h3'}
             >
-              {this.state.name}
+              {this.state.group.name}
             </Typography>
-            <Paper>
-              <TextField
-                fullWidth
-                margin={'normal'}
-                multiline
-                placeholder={'What is in your mind?'}
-                rows={2}
-                rowsMax={50}
-              />
-              <Button
-                color={'primary'}
-                variant={'contained'}
-              >Enviar</Button>
-            </Paper>
             <Feed />
           </Grid>
           <Grid item
@@ -106,7 +100,9 @@ class Group extends React.Component {
                 <div className={useStyles.paper}>
                   <b>Membros</b>
                   <br />
-                  <p>{membersList}</p>
+                  <p>
+                    {this.renderMembers()}
+                  </p>
                 </div>
               </Grid>
               <Grid item
