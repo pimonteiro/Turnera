@@ -13,7 +13,14 @@
     "morgan": "~1.9.1",
     "neo4j": "^2.0.0-RC2",
     "neo4j-driver": "^4.0.1",
-    "pug": "2.0.0-beta11",
     "uuid4": "^1.1.4"
+  },
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-seegno": "^15.0.0",
+    "eslint-plugin-json": "^2.0.1"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   }
 }
