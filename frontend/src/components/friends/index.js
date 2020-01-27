@@ -1,7 +1,6 @@
 import { Avatar, Button, Card, CardActions, CardContent, Grid, Link, Typography } from '@material-ui/core';
 
 import React from 'react';
-import axios from 'axios';
 import { getResource, deleteResource } from '../api-handler';
 import { onChange } from '..';
 
@@ -29,7 +28,7 @@ class FriendList extends React.Component {
   removeFriend(ind) {
     deleteResource(`users/${this.state.userId}/friends/${ind}`)
       .then(res => {
-        this.props.history.push(`/${this.state.userId}/friends`);
+        this.props.history.push(`/users/${this.state.userId}/friends`);
       })
       .catch(res => {
         console.log(res)
@@ -71,7 +70,7 @@ class FriendList extends React.Component {
               </Grid>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeFriend(index)}>Remove</Button>
+              <Button onClick={this.removeFriend}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>
