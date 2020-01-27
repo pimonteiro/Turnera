@@ -83,14 +83,18 @@ class FriendList extends React.Component {
   render() {
     return (
       <div>
-        <Grid container spacing={1}>
-          <Grid item xs={12}>
+        <Grid container
+          spacing={1}
+        >
+          <Grid item
+            xs={12}
+          >
             <Typography component={'h1'}
               variant={'h3'}
             >
                             Amigos
             </Typography>
-            <br/>
+            <br />
           </Grid>
           {this.renderFriends()}
         </Grid>

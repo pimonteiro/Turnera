@@ -1,8 +1,7 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Home } from './components/home';
-
-import FriendRequests from './components/friend-requests';
 import FriendList from './components/friends';
+import FriendRequests from './components/friend-requests';
 import Group from './components/groups/show';
 import GroupList from './components/groups';
 import Navbar from './components/navbar/bar';
@@ -12,7 +11,6 @@ import React from 'react';
 import Signin from './components/session/signin';
 import Signup from './components/session/signup';
 import Switch from 'react-bootstrap/cjs/Switch';
-import FriendList from './components/friends';
 
 export default class App extends React.Component {
 
@@ -44,7 +42,7 @@ export default class App extends React.Component {
           <Route
             component={Group}
             exact
-            path={'/group/:group_id'}
+            path={'/groups/:group_id'}
           />
           <Route
             component={Profile}
@@ -52,9 +50,9 @@ export default class App extends React.Component {
             path={'/users/:user_id'}
           />
           <Route
-            component={FriendList}
+            component={FriendRequests}
             exact
-            path={'/users/:user_id/friends-request'}
+            path={'/users/:user_id/friends-requests'}
           />
           <Route
             component={GroupList}

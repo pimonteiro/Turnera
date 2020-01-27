@@ -1,5 +1,5 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
-  Grid, IconButton, MenuItem, Select, TextField, Typography, Link } from '@material-ui/core';
+  Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
 import { onChange, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
@@ -224,24 +224,25 @@ class Profile extends React.Component {
                       value={this.state.data.email}
                       variant={'outlined'}
                     />
-                    <TextField fullWidth
+                    <TextField
+                      defaultValue={this.state.data.name}
+                      fullWidth
                       id={'name'}
                       label={'Name'}
                       margin={'normal'}
                       name={'name'}
                       onChange={({ target: { value } }) => onChange(this, value, 'data.name')}
                       type={'text'}
-                      defaultValue={this.state.data.name}
                       variant={'outlined'}
                     />
                     <Select
+                      defaultValue={this.state.data.gender}
                       fullWidth
                       id={'gender'}
                       label={'Gender'}
                       margin={'normal'}
                       name={'gender'}
                       onChange={({ target: { value } }) => onChange(this, value, 'data.gender')}
-                      defaultValue={this.state.data.gender}
                       variant={'outlined'}
                     >
                       <MenuItem value={'Female'}>Female</MenuItem>
@@ -259,10 +260,14 @@ class Profile extends React.Component {
                     </Button>
                   </form>
                 </div>
-                <br/>
-                  <Link href={"/users/" + this.props.match.userId + "/friends"}>
-                      <Button justify={'center'} width={50} variant={'contained'} color={'secondary'}>Amigos</Button>
-                  </Link>
+                <br />
+                <Link href={`/users/${this.props.match.userId}/friends`}>
+                  <Button color={'secondary'}
+                    justify={'center'}
+                    variant={'contained'}
+                    width={50}
+                  >Amigos</Button>
+                </Link>
               </Container>
             </Grid>
           </Grid>

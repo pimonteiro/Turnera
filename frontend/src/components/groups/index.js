@@ -73,7 +73,7 @@ class GroupList extends React.Component {
           <Card style={{ textAlign: 'center' }}>
             <CardContent>
               <Typography color={'textSecondary'}>
-                <Link href={`/${this.props.match.userId}/groups/${group.id}`}>
+                <Link href={`/groups/${group.id}`}>
                   {group.name}
                 </Link>
               </Typography>

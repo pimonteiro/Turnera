@@ -18,7 +18,7 @@ class SubmitFile extends React.Component {
   }
 
     sendFile = () => {
-      axios.post(config.apiR + this.props.link)
+      axios.post(config.apiURL + this.props.link)
         .then(() => {
           this.props.history.push(this.props.return);
         })
