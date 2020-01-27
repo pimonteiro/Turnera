@@ -1,7 +1,8 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
-import { onChange, useStyles } from '../index';
+import { getResource } from '../api-handler';
+import { onChange, slice, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 
 import React from 'react';
@@ -9,85 +10,11 @@ import SubmitFile from '../submit-file/index';
 import axios from 'axios';
 import config from '../../config';
 
-const posts = [
-  {
-    group: '5700a8d1-fd10-4517-9c58-a6a7ae37f2b1',
-    hashtags: ['post', 'teste', 'daw'],
-    id: '687f0ab9-5089-45a9-99c7-e2e56fc9aa92',
-    likes: [],
-    owner: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'João Vilaça'
-    },
-    text: 'Post nº1'
-  },
-  {
-    group: '',
-    hashtags: ['teste', 'daw'],
-    id: 'c9e72ecf-8e3a-4893-b823-2158b1f3bff0',
-    likes: ['ce077699-2fd8-4785-a48b-ce6807674308', 'abb20016-899a-47ba-a207-76040c2e0fbc', '9d802498-2da9-4ba3-80c8-d746aba1aa4a'],
-    owner: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'João Vilaça'
-    },
-    text: 'Post nº2'
-  },
-  {
-    group: '5700a8d1-fd10-4517-9c58-a6a7ae37f2b1',
-    hashtags: ['post', 'teste', 'daw'],
-    id: '687f0ab9-5089-45a9-99c7-e2e56fc9aa92',
-    likes: [],
-    owner: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'João Vilaça'
-    },
-    text: 'Post nº1'
-  },
-  {
-    group: '',
-    hashtags: ['teste', 'daw'],
-    id: 'c9e72ecf-8e3a-4893-b823-2158b1f3bff0',
-    likes: ['ce077699-2fd8-4785-a48b-ce6807674308', 'abb20016-899a-47ba-a207-76040c2e0fbc', '9d802498-2da9-4ba3-80c8-d746aba1aa4a'],
-    owner: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'João Vilaça'
-    },
-    text: 'Post nº2'
-  },
-  {
-    group: '5700a8d1-fd10-4517-9c58-a6a7ae37f2b1',
-    hashtags: ['post', 'teste', 'daw'],
-    id: '687f0ab9-5089-45a9-99c7-e2e56fc9aa92',
-    likes: [],
-    owner: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'João Vilaça'
-    },
-    text: 'Post nº1'
-  },
-  {
-    group: '',
-    hashtags: ['teste', 'daw'],
-    id: 'c9e72ecf-8e3a-4893-b823-2158b1f3bff0',
-    likes: ['ce077699-2fd8-4785-a48b-ce6807674308', 'abb20016-899a-47ba-a207-76040c2e0fbc', '9d802498-2da9-4ba3-80c8-d746aba1aa4a'],
-    owner: {
-      id: '134dc87a-cb43-4943-931f-2f1eafc25309',
-      image: 'https://www.apicius.es/wp-content/uploads/2012/07/IMG-20120714-009211.jpg',
-      name: 'João Vilaça'
-    },
-    text: 'Post nº2'
-  }
-];
-
 class Profile extends React.Component {
 
   constructor(props) {
     super(props);
+
     this.state = {
       data: {
         email: 'pi@pi.pt',
@@ -96,8 +23,10 @@ class Profile extends React.Component {
       },
       id: '',
       open: false,
-      posts
+      posts: [],
+      userId: props.match.params.userId
     };
+
     this.changeDetails = this.changeDetails.bind(this);
     this.removeAccount = this.removeAccount.bind(this);
   }
@@ -127,20 +56,20 @@ class Profile extends React.Component {
       });
   }
 
-  componentDidMount() {
-    const userId = this.props.match.params.userId;
+  getPosts = async () => {
+    return await getResource(`users/${this.state.userId}/posts`);
+  };
 
-    onChange(this, userId, 'id');
-    axios.get(`${config.apiURL}/users/${this.state.id}`)
-      .then(res => {
-        // Store received data
-        onChange(this, res.data.name, 'data.name');
-        onChange(this, res.data.gender, 'data.gender');
-        onChange(this, res.data.email, 'data.email');
-      })
-      .catch(() => {
-        // This.props.history.push("/404")
+  getUser = async () => {
+    return await getResource(`users/${this.state.userId}`);
+  };
+
+  componentDidMount() {
+    this.getPosts().then(posts => {
+      this.getUser().then(user => {
+        this.setState({ posts: slice(posts.data), user: user.data });
       });
+    });
   }
 
   render() {
@@ -215,7 +144,7 @@ class Profile extends React.Component {
                   >
                     <TextField autoComplete={'email'}
                       autoFocus
-                      disabled={'true'}
+                      disabled
                       fullWidth
                       id={'email'}
                       label={'Email Address'}
@@ -240,7 +169,6 @@ class Profile extends React.Component {
                       fullWidth
                       id={'gender'}
                       label={'Gender'}
-                      margin={'normal'}
                       name={'gender'}
                       onChange={({ target: { value } }) => onChange(this, value, 'data.gender')}
                       variant={'outlined'}
@@ -273,11 +201,10 @@ class Profile extends React.Component {
           </Grid>
         </Grid>
         <Grid item
-          justify={'center'}
           xs={9}
         >
           <div style={{ marginRight: '5%' }}>
-            { renderPosts(this.state.posts) }
+            { renderPosts(this.state.posts, this.state.user) }
           </div>
         </Grid>
 

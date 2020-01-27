@@ -43,7 +43,7 @@ def create_cities():
 
             for city in cities:
                 create_city(tx, city)
-            
+
             tx.commit()
 
 def create_users():
@@ -54,19 +54,19 @@ def create_users():
 
             for user in users:
                 create_user(tx, user)
-            
+
             tx.commit()
 
 def create_user(tx, user):
     tx.run(
         """
-        MATCH (home_town:City {id: $ht_id}), (lives_in:City {id: $liv_id}) 
-        CREATE (user:User { 
-            id: $id, 
-            email: $email, 
-            gender: $gender, 
+        MATCH (home_town:City {id: $ht_id}), (lives_in:City {id: $liv_id})
+        CREATE (user:User {
+            id: $id,
+            email: $email,
+            gender: $gender,
             name: $name,
-            date: $date 
+            date: $date
             })
         CREATE (user)-[:lives_in]->(lives_in)
         CREATE (user)-[:home_town]->(home_town)
@@ -105,7 +105,7 @@ def create_group(tx, group):
 
     for line in create_list:
         query += line
-    
+
     tx.run(
         query,
         name = group['name'],
@@ -121,7 +121,7 @@ def create_groups():
 
             for group in groups:
                 create_group(tx, group)
-            
+
             tx.commit()
 
 
@@ -189,7 +189,7 @@ def create_posts():
                     i += 1
 
                 match_list.append(match_owner.format(id = post['owner']))
-                
+
                 if post['group']:
                     match_list.append(match_group.format(id = post['group']))
 
@@ -205,7 +205,7 @@ def create_posts():
 
                 for line in create_list:
                     query += line
-                
+
                 tx.run(
                     query,
                     text = post['text'],

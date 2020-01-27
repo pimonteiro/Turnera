@@ -21,7 +21,7 @@ export const getResourceWithParams = async (resource, params) => {
 export const createResource = async (resource, data) => {
   const url = createUrl(resource);
 
-  return await axios.get(url, data);
+  return await axios.post(url, data);
 };
 
 export const deleteResource = async resource => {

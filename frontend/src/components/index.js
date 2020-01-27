@@ -26,3 +26,11 @@ export const onChange = (state, value, key) => {
   obj[key] = value;
   state.setState(obj);
 };
+
+export const slice = array => {
+  if (!Array.isArray(array)) {
+    return [];
+  }
+
+  return array.slice(0, 5);
+};

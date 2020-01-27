@@ -363,7 +363,7 @@ router.get('/users/:id/posts/:pid', (req, res, next) => {
 
                     ret.owner = owner
                 }
-                else 
+                else
                     ret.group = record.get('a').properties
             }
             else if (record.get('r').type == 'likes'){
@@ -389,7 +389,7 @@ router.get('/users/:id/posts/:pid', (req, res, next) => {
         })
         ret.likes = likes
         ret.comments = comments
-        
+
         res.jsonp(ret)
     })
     .catch(err => {
@@ -589,7 +589,7 @@ router.get('/groups/:id/posts/:pid', (req, res, next) => {
 
                     ret.owner = owner
                 }
-                else 
+                else
                     ret.group = record.get('a').properties
             }
             else if (record.get('r').type == 'likes'){
@@ -615,7 +615,7 @@ router.get('/groups/:id/posts/:pid', (req, res, next) => {
         })
         ret.likes = likes
         ret.comments = comments
-        
+
         res.jsonp(ret)
     })
     .catch(err => {
@@ -672,11 +672,11 @@ router.post('/posts/:id/like', (req, res, next) => {
         "MATCH (p:Post { id: $pid }), (u:User { id: $uid}) \
         CREATE (u)-[r:comment { text: $text, date: $date }]->(p) \
         RETURN r",
-        { 
-            pid: req.params.pid, 
-            uid: req.body.user, 
+        {
+            pid: req.params.pid,
+            uid: req.body.user,
             text: req.body.text,
-            date: new Date().getTime() 
+            date: new Date().getTime()
         })
     .then(data => {
         res.jsonp(data.records[0].get('r').properties)
