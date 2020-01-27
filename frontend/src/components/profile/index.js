@@ -1,7 +1,7 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
-import { getResource } from '../api-handler';
+import { getResource, deleteResource, updateResource } from '../api-handler';
 import { onChange, slice, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 
@@ -17,14 +17,14 @@ class Profile extends React.Component {
 
     this.state = {
       data: {
-        email: 'pi@pi.pt',
-        gender: 'Female',
-        name: 'Filipe'
+        email: '',
+        gender: '',
+        name: ''
       },
-      id: '',
       open: false,
       posts: [],
-      userId: props.match.params.userId
+      userId: props.match.params.userId,
+      user : ""
     };
 
     this.changeDetails = this.changeDetails.bind(this);
@@ -32,8 +32,8 @@ class Profile extends React.Component {
   }
 
   removeAccount() {
-    axios.delete(`${config.URL}/users/${this.state.id}`)
-      .then(() => {
+    deleteResource(`users/${this.state.userId}`)
+      .then(res =>  {
         // Remove session and other pending stuff
         this.props.history.push('/');
       })
@@ -43,17 +43,14 @@ class Profile extends React.Component {
   }
 
   changeDetails() {
-    axios.put(`${config.URL}/users/${this.state.id}`, {
-      gender: this.state.data.gender,
-      name: this.state.data.name
-    })
+    updateResource(`users/${this.state.userId}/`, {name: this.state.data.name, gender: this.state.data.gender})
       .then(() => {
         onChange(this, this.state.data.name, 'data.name');
         onChange(this, this.state.data.gender, 'data.gender');
       })
       .catch(res => {
         console.log(`Could not change details: ${res}`);
-      });
+      })
   }
 
   getPosts = async () => {
@@ -99,7 +96,7 @@ class Profile extends React.Component {
                     <img
                       alt={'...'}
                       className={'img-circle img-no-padding img-responsive'}
-                      src={'https://img.favpng.com/10/23/1/computer-icons-user-profile-avatar-png-favpng-ypy9BWih5X28x0zDEBeemwyx8.jpg'}
+                      src={this.state.user.pic}
                       style={{
                         height: 200,
                         width: 200
@@ -125,7 +122,7 @@ class Profile extends React.Component {
                                     Upload image
                           </DialogContentText>
                           <SubmitFile link={'/....'}
-                            return={`/users/${this.id}`}
+                            return={`/users/${this.state.userId }`}
                             type={'image'}
                           />
                         </DialogContent>
@@ -189,7 +186,7 @@ class Profile extends React.Component {
                   </form>
                 </div>
                 <br />
-                <Link href={`/users/${this.props.match.userId}/friends`}>
+                <Link href={`/users/${this.state.userId}/friends`}>
                   <Button color={'secondary'}
                     justify={'center'}
                     variant={'contained'}

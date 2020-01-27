@@ -29,3 +29,9 @@ export const deleteResource = async resource => {
 
   return await axios.delete(url);
 };
+
+export const updateResource = async (resource, data)  => {
+  const url = createUrl(resource);
+
+  return await axios.put(url, data);
+}

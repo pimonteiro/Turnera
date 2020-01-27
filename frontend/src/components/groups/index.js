@@ -1,70 +1,44 @@
 import { Button, Card, CardActions, CardContent, Grid, Link, Typography } from '@material-ui/core';
 
 import React from 'react';
-import axios from 'axios';
-
-const groups = [
-  {
-    id: '12313132',
-    n_members: 20,
-    name: 'Associação Académida da Universidade do Minho'
-  },
-  {
-    id: '12313132',
-    n_members: 20,
-    name: 'Associação Académida da Universidade do Minho'
-  },
-  {
-    id: '12313132',
-    n_members: 20,
-    name: 'Associação Académida da Universidade do Minho'
-  },
-  {
-    id: '12313132',
-    n_members: 20,
-    name: 'Associação Académida da Universidade do Minho'
-  },
-  {
-    id: '12313132',
-    n_members: 20,
-    name: 'Associação Académida da Universidade do Minho'
-  },
-  {
-    id: '12313132',
-    n_members: 20,
-    name: 'Associação Académida da Universidade do Minho'
-  }
-];
+import { getResource, deleteResource } from '../api-handler';
+import { onChange } from '..';
 
 class GroupList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      groups,
-      remove_id: ''
+      groups: [],
+      userId: props.match.params.userId
     };
     this.removeGroup = this.removeGroup.bind(this);
   }
 
-  removeGroup() {
-    axios.delete(`link/'}${this.props.match.userId}/groups/${this.state.remove_id}`)
-      .then(() => {
-        this.props.history.push(`/${this.props.match.userId}/groups`);
-      })
-      .catch(res => {
-        console.log(res);
-      });
+  removeGroup = async (ind) => {
+    console.log("Group to remove: " + ind)
+    this.props.history.push(`/users/${this.state.userId}/groups`)
+    return await deleteResource(`users/${this.state.userId}/groups/${ind}`)
   }
+
+  getGroups = async () => {
+    return await getResource(`users/${this.state.userId}/groups`)
+  }
+
+  componentDidMount() {
+    this.getGroups().then(res => {
+      onChange(this,res.data, 'groups')
+    })
+  }
+
 
   renderGroups() {
     const newlist = [];
-
-    if (groups.length === 0) {
+    if (this.state.groups.length === 0) {
       newlist.push(<h3>Não está em nenhum grupo.</h3>);
     }
 
-    groups.forEach((group, index) =>
+    this.state.groups.forEach((group, index) =>
       newlist.push(
         <Grid item
           key={index}
@@ -77,12 +51,9 @@ class GroupList extends React.Component {
                   {group.name}
                 </Link>
               </Typography>
-              <Typography color={'textSecondary'}>
-                                Membros: {group.n_members}
-              </Typography>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeGroup}>Remove</Button>
+              <Button onClick={this.removeGroup(index)}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>
@@ -106,6 +77,7 @@ class GroupList extends React.Component {
             >
                             Grupos
             </Typography>
+            <br/>
             <Grid container
               spacing={2}
             >

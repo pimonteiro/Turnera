@@ -2,47 +2,48 @@ import { Avatar, Button, Card, CardActions, CardContent, Grid, Link, Typography 
 
 import React from 'react';
 import axios from 'axios';
-
-const friends = [
-  {
-    id: 1,
-    name: 'Filipe Monteiro'
-  },
-  {
-    id: 2,
-    name: 'Márcia Weeb'
-  }
-];
+import { getResource, deleteResource } from '../api-handler';
+import { onChange } from '..';
 
 class FriendList extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      friends,
-      remove_id: ''
+      friends: [],
+      userId: props.match.params.userId
     };
     this.removeFriend = this.removeFriend.bind(this);
   }
 
-  removeFriend() {
-    axios.delete(`api/users/${this.props.match.userId}/friends/${this.state.remove_id}`)
-      .then(() => {
-        this.props.history.push(`/${this.props.match.userId}/groups`);
+  getFriends = async () => {
+    return await getResource(`users/${this.state.userId}/friends`)
+  }
+
+  componentDidMount(){
+    this.getFriends().then(res => {
+      onChange(this,res.data,'friends')
+    })
+  }
+
+  removeFriend(ind) {
+    deleteResource(`users/${this.state.userId}/friends/${ind}`)
+      .then(res => {
+        this.props.history.push(`/${this.state.userId}/friends`);
       })
       .catch(res => {
-        console.log(res);
-      });
+        console.log(res)
+      })
   }
 
   renderFriends() {
     const newlist = [];
 
-    if (friends.length === 0) {
+    if (this.state.friends.length === 0) {
       newlist.push(<h3>Sem amigos.</h3>);
     }
 
-    friends.forEach((friend, index) =>
+    this.state.friends.forEach((friend, index) =>
       newlist.push(
         <Grid item
           key={index}
@@ -70,7 +71,7 @@ class FriendList extends React.Component {
               </Grid>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeFriend}>Remove</Button>
+              <Button onClick={this.removeFriend(index)}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>
