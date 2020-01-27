@@ -1,9 +1,8 @@
 import { Avatar, Button, Card, CardActions, CardContent, Grid, Link, Typography } from '@material-ui/core';
+import { deleteResource, getResource } from '../api-handler';
+import { onChange } from '..';
 
 import React from 'react';
-import axios from 'axios';
-import { getResource, deleteResource } from '../api-handler';
-import { onChange } from '..';
 
 class FriendList extends React.Component {
 
@@ -17,23 +16,23 @@ class FriendList extends React.Component {
   }
 
   getFriends = async () => {
-    return await getResource(`users/${this.state.userId}/friends`)
-  }
-
-  componentDidMount(){
-    this.getFriends().then(res => {
-      onChange(this,res.data,'friends')
-    })
-  }
+    return await getResource(`users/${this.state.userId}/friends`);
+  };
 
   removeFriend(ind) {
     deleteResource(`users/${this.state.userId}/friends/${ind}`)
-      .then(res => {
+      .then(() => {
         this.props.history.push(`/${this.state.userId}/friends`);
       })
       .catch(res => {
-        console.log(res)
-      })
+        console.log(res);
+      });
+  }
+
+  componentDidMount() {
+    this.getFriends().then(res => {
+      onChange(this, res.data, 'friends');
+    });
   }
 
   renderFriends() {

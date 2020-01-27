@@ -1,14 +1,12 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
-import { getResource, deleteResource, updateResource } from '../api-handler';
+import { deleteResource, getResource, updateResource } from '../api-handler';
 import { onChange, slice, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 
 import React from 'react';
 import SubmitFile from '../submit-file/index';
-import axios from 'axios';
-import config from '../../config';
 
 class Profile extends React.Component {
 
@@ -23,8 +21,8 @@ class Profile extends React.Component {
       },
       open: false,
       posts: [],
-      userId: props.match.params.userId,
-      user : ""
+      user: {},
+      userId: props.match.params.userId
     };
 
     this.changeDetails = this.changeDetails.bind(this);
@@ -33,7 +31,7 @@ class Profile extends React.Component {
 
   removeAccount() {
     deleteResource(`users/${this.state.userId}`)
-      .then(res =>  {
+      .then(() => {
         // Remove session and other pending stuff
         this.props.history.push('/');
       })
@@ -43,28 +41,25 @@ class Profile extends React.Component {
   }
 
   changeDetails() {
-    updateResource(`users/${this.state.userId}/`, {name: this.state.data.name, gender: this.state.data.gender})
+    updateResource(`users/${this.state.userId}/`, { name: this.state.data.name, gender: this.state.data.gender })
       .then(() => {
         onChange(this, this.state.data.name, 'data.name');
         onChange(this, this.state.data.gender, 'data.gender');
       })
       .catch(res => {
         console.log(`Could not change details: ${res}`);
-      })
+      });
   }
 
   getPosts = async () => {
     return await getResource(`users/${this.state.userId}/posts`);
   };
 
-  getUser = async () => {
-    return await getResource(`users/${this.state.userId}`);
-  };
-
   componentDidMount() {
     this.getPosts().then(posts => {
-      this.getUser().then(user => {
-        this.setState({ posts: slice(posts.data), user: user.data });
+      this.setState({
+        posts: slice(posts.data),
+        user: posts.data.length > 0 ? posts.data[0].owner : {}
       });
     });
   }
@@ -96,7 +91,7 @@ class Profile extends React.Component {
                     <img
                       alt={'...'}
                       className={'img-circle img-no-padding img-responsive'}
-                      src={this.state.user.pic}
+                      src={this.state.user.image}
                       style={{
                         height: 200,
                         width: 200
@@ -119,10 +114,10 @@ class Profile extends React.Component {
                         <DialogTitle id={'form-dialog-title'}>Upload</DialogTitle>
                         <DialogContent>
                           <DialogContentText>
-                                    Upload image
+                                    Upload 3
                           </DialogContentText>
                           <SubmitFile link={'/....'}
-                            return={`/users/${this.state.userId }`}
+                            return={`/users/${this.state.userId}`}
                             type={'image'}
                           />
                         </DialogContent>
@@ -201,7 +196,7 @@ class Profile extends React.Component {
           xs={9}
         >
           <div style={{ marginRight: '5%' }}>
-            { renderPosts(this.state.posts, this.state.user) }
+            { renderPosts(this.state.posts) }
           </div>
         </Grid>
 

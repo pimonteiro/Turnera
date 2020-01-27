@@ -16,10 +16,7 @@ function renderHashtags(hashtags) {
   return renderedHastags;
 }
 
-export function renderPost(post, user, index) {
-  console.log(post);
-  console.log(user);
-  
+export function renderPost(post, index) {
   return (
     <Card
       className={'mb-5'}
@@ -31,12 +28,12 @@ export function renderPost(post, user, index) {
           <Avatar
             alt={'user_image'}
             className={'my-3'}
-            src={user.image}
+            src={post.owner.image}
             style={{ height: '100px', marginRight: '10px', width: '100px' }}
           />
-          <a href={`/users/${user.id}`}>
+          <a href={`/users/${post.owner.id}`}>
             <Card.Text style={{ display: 'table-cell', height: '120px', verticalAlign: 'middle' }}>
-              { user.name }
+              { post.owner.name }
             </Card.Text>
           </a>
         </div>
@@ -51,7 +48,7 @@ export function renderPost(post, user, index) {
   );
 }
 
-export function renderPosts(posts, user) {
+export function renderPosts(posts) {
   const renderedPosts = [];
 
   if (posts.length === 0) {
@@ -62,7 +59,7 @@ export function renderPosts(posts, user) {
     renderedPosts.push(
       <div key={index}>
         <a href={`/posts/${post.id}`}><MdSend size={'1.5em'} /></a>
-        { renderPost(post, user, index) }
+        { renderPost(post, index) }
       </div>
     )
   );
