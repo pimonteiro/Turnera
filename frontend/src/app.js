@@ -2,6 +2,7 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { Home } from './components/home';
 
 import FriendRequests from './components/friend-requests';
+import FriendList from './components/friends';
 import Group from './components/groups/show';
 import GroupList from './components/groups';
 import Navbar from './components/navbar/bar';
@@ -59,6 +60,11 @@ export default class App extends React.Component {
             component={GroupList}
             exact
             path={'/users/:user_id/groups'}
+          />
+          <Route
+            component={FriendList}
+            exact
+            path={'/users/:userId/friends'}
           />
         </Switch>
       </BrowserRouter> : <BrowserRouter>
