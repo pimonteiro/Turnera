@@ -8,50 +8,44 @@ import Feed from '../posts';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import axios from 'axios';
-import config from '../../config';
+import { getResource, deleteResource } from '../api-handler';
 
 class Group extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      descr: '',
-      id: '',
-      input: {
-        file: '',
-        text: ''
-      },
-      members: [],
-      name: ''
+      group: "",
+      groupId: props.match.params.groupId,
+      userId: props.match.params.userId
     };
 
     this.exitGroup = this.exitGroup.bind(this);
   }
 
   exitGroup() {
-    axios.delete(`${config.apiURL}...`)
+    deleteResource(`users/${this.state.userId}/groups/${this.state.groupId}`)
       .then(() => {
-        this.props.push('/posts');
+        this.props.history.push('/posts')
       })
       .catch(res => {
         console.log(res);
       });
   }
 
-  componentDidMount() {
-    const groupId = this.props.match.params.groupId;
+  getGroup = async () => {
+    return await getResource(`users/${this.state.userId}/groups/${this.state.groupId}`)  
+  }
 
-    onChange(this, groupId, 'id');
-    axios.get(`${config.apiURL}/groups/${this.state.id}`)
-      .then(res => {
-        // Store received data
-        onChange(this, res.data.name, 'name');
-        onChange(this, res.data.members, 'members');
+  componentDidMount() {
+    this.getGroup()
+      .then(res =>  {
+        onChange(this,res.data, 'group')
       })
-      .catch(() => {
-        // This.props.history.push("/404")
-      });
+      .catch(res => {
+        console.log(res)
+        //This.props.history.push("/404")
+      })
   }
 
   render() {
@@ -96,7 +90,7 @@ class Group extends React.Component {
               <Button
                 color={'primary'}
                 variant={'contained'}
-              >Send</Button>
+              >Enviar</Button>
             </Paper>
             <Feed />
           </Grid>
@@ -110,7 +104,7 @@ class Group extends React.Component {
                 xs={12}
               >
                 <div className={useStyles.paper}>
-                  <b>Members</b>
+                  <b>Membros</b>
                   <br />
                   <p>{membersList}</p>
                 </div>
@@ -119,21 +113,16 @@ class Group extends React.Component {
                 xs={12}
               >
                 <div className={useStyles.paper}>
-                  <b>Description</b>
+                  <b>Descrição</b>
                   <br />
                   {this.state.descr}
-                    Calendário de Exames: shorturl.at/cfuDP (2019/2020)
-                    Material do Curso: https://goo.gl/Gd9r6c (dropbox)
-
-                    Regras de publicação: [CADEIRA] Conteúdo da publicação.
-                    "CADEIRA" a usar: Geral, Algebra, Analise, Calculo, EES, LI1, LI2, Logica, PF, PI, SC, TFM, TMD, AlgC, ArqC, CP, CD, Eletro, EE, EA, ISD, LI3, OpUM_Cadeira (Opção UMinho), POO, SO, BD, CG, CC, DSS, LI4, MNONL, MDIO, MEIO, PL, RC, SRCR, SD.
                 </div>
                 <Button
                   color={'secondary'}
                   onClick={this.exitGroup}
                   variant={'contained'}
                 >
-                      Exit group
+                      Sair do Grupo
                 </Button>
               </Grid>
             </Grid>

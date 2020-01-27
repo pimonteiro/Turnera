@@ -47,7 +47,7 @@ class GroupList extends React.Component {
           <Card style={{ textAlign: 'center' }}>
             <CardContent>
               <Typography color={'textSecondary'}>
-                <Link href={`/groups/${group.id}`}>
+                <Link href={`/users/${this.state.userId}/groups/${group.id}`}>
                   {group.name}
                 </Link>
               </Typography>

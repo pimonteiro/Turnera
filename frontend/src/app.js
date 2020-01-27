@@ -43,12 +43,12 @@ export default class App extends React.Component {
           <Route
             component={Post}
             exact
-            path={'/posts/:post_id'}
+            path={'/posts/:postId'}
           />
           <Route
             component={Group}
             exact
-            path={'/groups/:group_id'}
+            path={'/users/:userId/groups/:groupId'}
           />
           <Route
             component={Profile}
@@ -58,12 +58,12 @@ export default class App extends React.Component {
           <Route
             component={FriendRequests}
             exact
-            path={'/users/:user_id/friends-requests'}
+            path={'/users/:userId/friends-requests'}
           />
           <Route
             component={GroupList}
             exact
-            path={'/users/:user_id/groups'}
+            path={'/users/:userId/groups'}
           />
           <Route
             component={FriendList}
