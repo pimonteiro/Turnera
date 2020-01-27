@@ -91,14 +91,8 @@ class Profile extends React.Component {
     this.state = {
       data: {
         email: 'pi@pi.pt',
-        gender: {
-          after: 'Female',
-          before: 'Female'
-        },
-        name: {
-          after: 'Filipe',
-          before: 'Filipe'
-        }
+        gender: 'Female',
+        name: 'Filipe'
       },
       id: '',
       open: false,
@@ -120,19 +114,17 @@ class Profile extends React.Component {
   }
 
   changeDetails() {
-    if (this.state.data.name.before !== this.state.data.name.after || this.state.data.gender.before !== this.state.data.gender.after) {
-      axios.put(`${config.URL}/users/${this.state.id}`, {
-        gender: this.state.data.gender.after,
-        name: this.state.data.name.after
+    axios.put(`${config.URL}/users/${this.state.id}`, {
+      gender: this.state.data.gender,
+      name: this.state.data.name
+    })
+      .then(() => {
+        onChange(this, this.state.data.name, 'data.name');
+        onChange(this, this.state.data.gender, 'data.gender');
       })
-        .then(() => {
-          onChange(this, this.state.data.name.after, 'data.name.before');
-          onChange(this, this.state.data.gender.after, 'data.gender.before');
-        })
-        .catch(res => {
-          console.log(`Could not change details: ${res}`);
-        });
-    }
+      .catch(res => {
+        console.log(`Could not change details: ${res}`);
+      });
   }
 
   componentDidMount() {
@@ -142,10 +134,8 @@ class Profile extends React.Component {
     axios.get(`${config.apiURL}/users/${this.state.id}`)
       .then(res => {
         // Store received data
-        onChange(this, res.data.name, 'data.name.before');
-        onChange(this, res.data.name, 'data.name.after');
-        onChange(this, res.data.gender, 'data.gender.before');
-        onChange(this, res.data.gender, 'data.gender.after');
+        onChange(this, res.data.name, 'data.name');
+        onChange(this, res.data.gender, 'data.gender');
         onChange(this, res.data.email, 'data.email');
       })
       .catch(() => {
@@ -239,9 +229,9 @@ class Profile extends React.Component {
                       label={'Name'}
                       margin={'normal'}
                       name={'name'}
-                      onChange={({ target: { value } }) => onChange(this, value, 'data.name.after')}
+                      onChange={({ target: { value } }) => onChange(this, value, 'data.name')}
                       type={'text'}
-                      value={this.state.data.name.after}
+                      defaultValue={this.state.data.name}
                       variant={'outlined'}
                     />
                     <Select
@@ -250,8 +240,8 @@ class Profile extends React.Component {
                       label={'Gender'}
                       margin={'normal'}
                       name={'gender'}
-                      onChange={({ target: { value } }) => onChange(this, value, 'data.gender.after')}
-                      value={this.state.data.gender.after}
+                      onChange={({ target: { value } }) => onChange(this, value, 'data.gender')}
+                      defaultValue={this.state.data.gender}
                       variant={'outlined'}
                     >
                       <MenuItem value={'Female'}>Female</MenuItem>
@@ -271,11 +261,9 @@ class Profile extends React.Component {
                 </div>
                 <br/>
                   <Link href={"/users/" + this.props.match.userId + "/friends"}>
-                      <Button justify={'center'} width={50} variant={'contained'} color={'secundary'}>Amigos</Button>
+                      <Button justify={'center'} width={50} variant={'contained'} color={'secondary'}>Amigos</Button>
                   </Link>
               </Container>
-            </Grid>
-            <Grid item xs={12} alignItems={'center'}>
             </Grid>
           </Grid>
         </Grid>
