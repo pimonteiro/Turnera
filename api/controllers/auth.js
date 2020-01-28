@@ -12,6 +12,9 @@ const driver = neo4j.driver(
   neo4j.auth.basic('neo4j', 'admin')
 );
 
+const bcrypt = require('bcryptjs')
+
+
 Auth.signup = async (req, res) => {
   const session = driver.session();
   
@@ -22,6 +25,9 @@ Auth.signup = async (req, res) => {
     {algorithm: 'HS256'}
     );
   
+  var hash = bcrypt.hashSync(req.body.password, 6)
+  req.body.password = hash
+
   const data = await dbDriver.exec(session, "CREATE (u:User $user) RETURN u", {user: req.body});
   res.jsonp(data.records[0].get('u').properties);
 };
@@ -35,7 +41,7 @@ Auth.signin = async (req, res) => {
   let data = await dbDriver.exec(session, "MATCH (u:User { email: $email }) RETURN u", { email: email });
   const user = data.records[0].get('u').properties;
   
-  if (password !== user.password) {
+  if (!bcrypt.compareSync(password, user.password)) {
     throw new Error('Wrong Credentials');
   }
   
