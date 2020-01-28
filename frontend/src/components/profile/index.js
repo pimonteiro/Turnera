@@ -1,7 +1,7 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
-import { getResource, deleteResource, updateResource } from '../api-handler';
+import { getResource, deleteResource, updateResource, createResource} from '../api-handler';
 import { onChange, slice, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 import DateFnsUtils from '@date-io/date-fns';
@@ -39,6 +39,7 @@ class Profile extends React.Component {
     this.updateName = this.updateName.bind(this);
     this.updateGender = this.updateGender.bind(this);
     this.updateDate = this.updateDate.bind(this);
+    this.addFriend = this.addFriend.bind(this);
   }
 
   updateName(v){
@@ -67,8 +68,20 @@ class Profile extends React.Component {
     this.props.history.push('/')
   }
 
+  addFriend() {
+    createResource(`users/${this.state.userId}/friend-requests/${this.state.user.id}`)
+      .then(res => {
+        console.log("Added friend!")
+      })
+      .catch(res => {
+        console.log(res)
+      })
+  }
+
   changeDetails() {
-    updateResource(`users/${this.state.userId}/`, {image: this.state.user.image,name: this.state.user.name, gender: this.state.user.gender, date: moment(this.state.user.date,"DD-MM-YYYY").format("DD/MM/YYYY").toString()})
+    var dummy = this.state.user
+    dummy.date = moment(this.state.user.date,"DD-MM-YYYY").format("DD/MM/YYYY").toString()
+    updateResource(`users/${this.state.userId}/`, dummy)
       .then(() => {
         console.log("Done")
       })
@@ -315,7 +328,12 @@ class Profile extends React.Component {
                     >Logout</Button>
                     </div>
                 ) : (
-                  <br/>
+                  <Button color={'secondary'}
+                  justify={'center'}
+                  variant={'contained'}
+                  width={50}
+                  onClick={this.addFriend}
+                  >Adicionar</Button>
                 )}
               </Container>
             </Grid>
