@@ -15,6 +15,8 @@ const usersFriends = require('./routes/usersFriends');
 const usersGroups = require('./routes/usersGroups');
 const usersPosts = require('./routes/usersPosts');
 const posts = require('./routes/posts');
+const auth = require('./routes/auth');
+const AuthController = require("./controllers/auth");
 
 const app = express();
 app.use(cors());
@@ -23,6 +25,23 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+
+app.use('/api', auth);
+
+app.use((req, res, next) => {
+  if (req.query.token === undefined) { //TODO: DONT BREAK DEV
+    next();
+  }
+  
+  AuthController.verify(req.query.token)
+    .then(value => {
+      if(value) {
+        next()
+      } else {
+        next(createError(401));
+      }
+    });
+});
 
 app.use('/api', groups);
 app.use('/api', groupsPosts);
@@ -36,6 +55,7 @@ app.use('/api', usersGroups);
 app.use('/api', usersPosts);
 app.use('/api', posts);
 
+
 app.use(function(req, res, next) {
   next(createError(404));
 });
@@ -47,6 +67,7 @@ app.use(function(err, req, res) {
 
   // render the error page
   res.status(err.status || 500);
-  res.json({ error: err })});
+  res.json({ error: err })
+});
 
 module.exports = app;

@@ -1,7 +1,7 @@
 const UserPosts = module.exports;
 
 const dbDriver = require('../dbDriver');
-1
+
 const i = [
   'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pierre-Person.jpg/1200px-Pierre-Person.jpg',
   'https://cdn.collider.com/wp-content/uploads/2017/10/the-gifted-amy-acker-02.jpg',
