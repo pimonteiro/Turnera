@@ -1,13 +1,13 @@
-const { DefaultAzureCredential } = require("@azure/identity");
+const { ClientSecretCredential } = require("@azure/identity");
 const { BlobServiceClient } = require("@azure/storage-blob");
 var fs = require('fs')
 
-process.env.AZURE_TENANT_ID = '5633c12f-032f-4713-b960-416376fec2db'
-process.env.AZURE_CLIENT_ID = '281a9491-4f98-4e72-a109-254841fc079e'
-process.env.AZURE_CLIENT_SECRET = '@2AS.Kd7X//qrFGXPmw3sejUtC1Jai-q'
-
 const account = "turnera";
-const defaultAzureCredential = new DefaultAzureCredential();
+const defaultAzureCredential = new ClientSecretCredential(
+    '5633c12f-032f-4713-b960-416376fec2db',
+    '281a9491-4f98-4e72-a109-254841fc079e',
+    '@2AS.Kd7X//qrFGXPmw3sejUtC1Jai-q'
+    );
 
 const blobServiceClient = new BlobServiceClient(
     `https://${account}.blob.core.windows.net`,
@@ -43,13 +43,13 @@ async function upload_file(path_to_file) {
     return "https://turnera.blob.core.windows.net/" + containerName + "/" + blobName
 }
 
-//upload_image('/home/leonardo/Downloads/test')
-//    .then((url) => {
-//        console.log(url)
-//    })
-//    .catch((ex) => {
-//        console.log(ex.message)
-//    });
+upload_image('/home/leonardo/Downloads/test')
+    .then((url) => {
+        console.log(url)
+    })
+    .catch((ex) => {
+        console.log(ex.message)
+    });
 //
 //upload_file('/path/to/file')
 //    .then((url) => {
