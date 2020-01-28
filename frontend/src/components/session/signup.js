@@ -28,7 +28,8 @@ export default class Signup extends React.Component {
       name: '',
       gender: 'Unknown',
       date: new Date(),
-      type: 'signup'
+      type: 'signup',
+      popup: false
     };
   }
 

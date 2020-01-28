@@ -13,13 +13,14 @@ import React from 'react';
 import Signin from './components/session/signin';
 import Signup from './components/session/signup';
 import Switch from 'react-bootstrap/cjs/Switch';
+import NotFound from './components/404';
 
 export default class App extends React.Component {
 
   constructor(props) {
     super(props);
 
-    this.state = { userId: localStorage.getItem('userId') };
+    this.state = { userId: localStorage.getItem('userId'), error: "" };
   }
 
   userLoggedIn = state => {
@@ -31,7 +32,10 @@ export default class App extends React.Component {
         localStorage.setItem('userId', raw.data.id);
 
         this.setState({ userId: raw.data.id });
-      });
+      })
+      .catch(err => {
+        this.setState({error: err})
+      })
   };
 
   render() {
@@ -74,6 +78,10 @@ export default class App extends React.Component {
             exact
             path={'/users/:userId/friends'}
           />
+          <Route
+            component={NotFound}
+            path="*"
+          />
         </Switch>
       </BrowserRouter> : <BrowserRouter>
         <Switch>
@@ -85,8 +93,12 @@ export default class App extends React.Component {
           <Route exact
             path={'/register'}
           >
-            <Signup callback={this.userLoggedIn} />
+            <Signup callback={this.userLoggedIn}/>
           </Route>
+          <Route
+            component={NotFound}
+            path="*"
+          />
         </Switch>
       </BrowserRouter>
     );
