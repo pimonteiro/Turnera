@@ -1,6 +1,7 @@
 import { Avatar, Button, Card, CardActions, CardContent, Grid, Link, Typography } from '@material-ui/core';
 import { deleteResource, getResource } from '../api-handler';
 import { onChange } from '..';
+import NotFound from '../404';
 
 import React from 'react';
 
@@ -10,7 +11,8 @@ class FriendList extends React.Component {
     super(props);
     this.state = {
       friends: [],
-      userId: props.match.params.userId
+      userId: props.match.params.userId,
+      id: props.loggedInUser
     };
     this.removeFriend = this.removeFriend.bind(this);
   }
@@ -81,6 +83,13 @@ class FriendList extends React.Component {
   }
 
   render() {
+    if(this.state.id != this.state.userId){
+      return(
+        <div>
+          <NotFound/>
+        </div>
+      )
+    }
     return (
       <div>
         <Grid container

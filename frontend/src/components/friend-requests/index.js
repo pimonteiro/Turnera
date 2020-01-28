@@ -69,7 +69,7 @@ export default class FriendRequests extends React.Component {
                   style={{ marginLeft: '80%', position: 'absolute' }}
                 >
                   <Card.Text style={{ display: 'table-cell', height: '120px', verticalAlign: 'middle' }}>
-                    <Button onClick={this.acceptFriend}>Aceitar</Button>
+                    <Button onClick={this.acceptFriend(friendRequest)}>Aceitar</Button>
                   </Card.Text>
                 </a>
               </div>

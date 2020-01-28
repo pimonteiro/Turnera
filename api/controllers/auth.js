@@ -22,7 +22,8 @@ Auth.signup = async (req, res) => {
   req.body.token =  jwt.sign(
     {"email": req.body.email},
     key,
-    {algorithm: 'HS256'}
+    {algorithm: 'HS256', expiresIn: '2h'
+  }
     );
   
   var hash = bcrypt.hashSync(req.body.password, 6)
@@ -48,8 +49,8 @@ Auth.signin = async (req, res) => {
   const token = jwt.sign(
     {"id": req.body.id},
     key,
-    {algorithm: 'HS256'}
-  );
+    {algorithm: 'HS256', expiresIn: '2h'
+    }  );
   
   data = await dbDriver.exec(
     session,

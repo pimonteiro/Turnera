@@ -3,7 +3,7 @@ import { onChange } from '../index';
 import Button from '@material-ui/core/Button';
 import React from 'react';
 
-import {createResource} from '../api-handler'
+import {createResource, updateResource} from '../api-handler'
 class SubmitFile extends React.Component {
 
   constructor(props) {
@@ -16,13 +16,18 @@ class SubmitFile extends React.Component {
   }
 
     sendFile = () => {
-      createResource(`/linkmissing`)
-        .then(() => {
-          this.props.history.push(this.props.return);
+      createResource(`link`, {file: this.state.file})
+        .then(res => {
+          this.props.object.image = res.url
+          updateResource(this.props.link, this.props.object)
+          .then(() => {
+            this.props.history.push(this.props.return);
+          })
+          .catch(res => {
+            console.log(`Failed to upload file: ${res}`);
+          });
         })
-        .catch(res => {
-          console.log(`Failed to upload file: ${res}`);
-        });
+        .catch(res => console.log("Error azure: " + res))
     };
 
     render() {

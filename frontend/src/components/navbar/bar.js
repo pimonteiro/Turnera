@@ -21,7 +21,7 @@ export default class Bar extends React.Component {
     this.state = {
       groupsSearchResults: [],
       id: props.userId,
-      name: '',
+      name: props.userName,
       postsSearchResults: [],
       search: false,
       searchTerm: '',

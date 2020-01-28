@@ -15,13 +15,15 @@ export default class Post extends React.Component {
 
     this.state = {
       comments: [],
-      post: []
+      post: [],
+      postId: props.match.params.postId
     };
   }
 
   componentDidMount() {
-    getResource(`users/${this.state.userId}/posts`).then(posts => {
-      this.setState({ posts: slice(posts.data) });
+    getResource(`users/${this.state.postId}/posts/${this.state.postId}`).then(post => {
+      console.log(post);
+      this.setState({ post: post.data });
     });
   }
 
@@ -29,7 +31,7 @@ export default class Post extends React.Component {
     const renderedComments = [];
 
     if (comments.length === 0) {
-      renderedComments.push(<h3>Sem comentários</h3>);
+      renderedComments.push(<h3 key={0}>Sem comentários</h3>);
     }
 
     comments.forEach((comment, index) =>
@@ -72,9 +74,15 @@ export default class Post extends React.Component {
         direction={'column'}
         justify={'center'}
       >
-        { renderPost(this.state.post, 0) }
-        { this.renderComments(this.state.comments) }
-        <CreateComment postId={this.state.post.id} />
+        {this.state.post.length === 0 ?
+          <h3>A carregar publicação...</h3>
+        :
+          <div>
+            { renderPost(this.state.post, 0) }
+            { this.renderComments(this.state.comments) }
+            <CreateComment postId={this.state.post.id} />
+         </div>
+        }
       </Grid>
     );
   }

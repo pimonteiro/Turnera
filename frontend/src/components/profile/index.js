@@ -1,7 +1,7 @@
 import { Button, Container, CssBaseline, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle,
   Grid, IconButton, Link, MenuItem, Select, TextField, Typography } from '@material-ui/core';
 import { PhotoCamera } from '@material-ui/icons';
-import { getResource, deleteResource, updateResource } from '../api-handler';
+import { getResource, deleteResource, updateResource, createResource} from '../api-handler';
 import { onChange, slice, useStyles } from '../index';
 import { renderPosts } from '../posts/post-render';
 import DateFnsUtils from '@date-io/date-fns';
@@ -13,7 +13,7 @@ import {
 
 import React from 'react';
 import SubmitFile from '../submit-file/index';
-var moment = require('moment');
+import moment from 'moment';
 
 class Profile extends React.Component {
 
@@ -23,20 +23,23 @@ class Profile extends React.Component {
     this.state = {
       open: false,
       posts: [],
-      userId: props.match.params.userId,
+      userId: props.loggedInUser,
       user : {
         name: 'loading...',
         email: 'loading...',
         gender: 'Unknown',
-        date: new Date()
+        date: new Date(),
+        image: '',
+        id: props.match.params.userId
       }
     };
 
     this.changeDetails = this.changeDetails.bind(this);
-    this.removeAccount = this.removeAccount.bind(this);
+    this.logOut = this.logOut.bind(this);
     this.updateName = this.updateName.bind(this);
     this.updateGender = this.updateGender.bind(this);
     this.updateDate = this.updateDate.bind(this);
+    this.addFriend = this.addFriend.bind(this);
   }
 
   updateName(v){
@@ -58,19 +61,27 @@ class Profile extends React.Component {
     this.setState({user: dummy_user})
   }
 
-  removeAccount() {
-    deleteResource(`users/${this.state.userId}`)
-      .then(res =>  {
-        // Remove session and other pending stuff
-        this.props.history.push('/');
+  logOut() {
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    this.props.history.push('/')
+  }
+
+  addFriend() {
+    createResource(`users/${this.state.userId}/friend-requests/${this.state.user.id}`)
+      .then(res => {
+        console.log("Added friend!")
       })
       .catch(res => {
-        console.log(`Could not remove account: ${res}`);
-      });
+        console.log(res)
+      })
   }
 
   changeDetails() {
-    updateResource(`users/${this.state.userId}/`, {name: this.state.user.name, gender: this.state.user.gender, date: moment(this.state.user.date,"DD-MM-YYYY").format("DD/MM/YYYY").toString()})
+    var dummy = this.state.user
+    dummy.date = moment(this.state.user.date,"DD-MM-YYYY").format("DD/MM/YYYY").toString()
+    updateResource(`users/${this.state.userId}/`, dummy)
       .then(() => {
         console.log("Done")
       })
@@ -80,26 +91,30 @@ class Profile extends React.Component {
   }
 
   getPosts = async () => {
-    return await getResource(`users/${this.state.userId}/posts`);
+    return await getResource(`users/${this.state.user.id}/posts`);
   };
 
   getUser = async () => {
-    return await getResource(`users/${this.state.userId}`);
+    return await getResource(`users/${this.state.user.id}`);
   };
+  
 
   componentDidMount() {
     this.getPosts().then(posts => {
-      this.getUser().then(user => {
-        var dummy = user.data
-        var d1 = moment(dummy.date,"DD-MM-YYYY")
-        dummy.date = d1.toDate()
-        this.setState({ posts: slice(posts.data), user: dummy });
-        console.log(this.state.user)
-      });
+      this.setState({ posts: slice(posts.data) });
+    });
+  
+    this.getUser().then(user => {
+      var dummy = user.data
+      var d1 = moment(dummy.date,"DD-MM-YYYY")
+      dummy.date = d1.toDate()
+      this.setState({ user: dummy });
     });
   }
 
   render() {
+    console.log(this.state);
+    
     return (
       <Grid container>
         <Grid item
@@ -126,13 +141,14 @@ class Profile extends React.Component {
                     <img
                       alt={'...'}
                       className={'img-circle img-no-padding img-responsive'}
-                      //src={this.state.user.pic}
+                      src={this.state.user.image}
                       style={{
                         height: 200,
                         width: 200
                       }}
                     />
-                    <div>
+                    {this.state.userId == this.state.user.id ? (
+                      <div>
                       <label htmlFor={'icon-button-file'}>
                         <IconButton aria-label={'upload picture'}
                           color={'primary'}
@@ -151,9 +167,10 @@ class Profile extends React.Component {
                           <DialogContentText>
                                     Upload image
                           </DialogContentText>
-                          <SubmitFile link={'/....'}
+                          <SubmitFile link={`users/${this.state.userId}`}
                             return={`/users/${this.state.userId }`}
                             type={'image'}
+                            object={this.state.user}
                           />
                         </DialogContent>
                         <DialogActions>
@@ -165,8 +182,77 @@ class Profile extends React.Component {
                         </DialogActions>
                       </Dialog>
                     </div>
+                    ) : (
+                      <br/>
+                    )}
                   </div>
-                  <form className={useStyles.form}
+                  {this.state.userId == this.state.user.id ? (
+                      <form className={useStyles.form}
+                      noValidate
+                    >
+                      <TextField
+                        disabled
+                        fullWidth
+                        id={'email'}
+                        label={'Email Address'}
+                        margin={'normal'}
+                        name={'email'}
+                        value={this.state.user.email}
+                        variant={'outlined'}
+                      />
+                      <br/>
+                      <TextField
+                        value={this.state.user.name}
+                        fullWidth
+                        id={'name'}
+                        label={'Name'}
+                        margin={'normal'}
+                        name={'name'}
+                        onChange={({ target: { value } }) => this.updateName(value)}
+                        type={'text'}
+                        variant={'outlined'}
+                      />
+                      <br/>
+                      <Select
+                        value={this.state.user.gender}
+                        fullWidth
+                        id={'gender'}
+                        label={'Gender'}
+                        name={'gender'}
+                        onChange={({ target: { value } }) => this.updateGender(value)}
+                        variant={'outlined'}
+                      >
+                        <MenuItem value={`Female`}>Female</MenuItem>
+                        <MenuItem value={'Male'}>Male</MenuItem>
+                        <MenuItem value={'Unknown'}>Unknown</MenuItem>
+                      </Select>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                          disableToolbar
+                          variant="inline"
+                          format="dd/MM/yyyy"
+                          margin="normal"
+                          id="date-picker-inline"
+                          label="Data nascimento"
+                          value={this.state.user.date}
+                          onChange={(date) => this.updateDate(date)}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                      <Button className={useStyles.submit}
+                        color={'primary'}
+                        fullWidth
+                        onClick={this.changeDetails}
+                        style={{ marginTop: '20px' }}
+                        variant={'contained'}
+                      >
+                          Update
+                      </Button>
+                    </form>
+                  ) : (
+                    <form className={useStyles.form}
                     noValidate
                   >
                     <TextField
@@ -182,23 +268,23 @@ class Profile extends React.Component {
                     <br/>
                     <TextField
                       value={this.state.user.name}
+                      disabled
                       fullWidth
                       id={'name'}
                       label={'Name'}
                       margin={'normal'}
                       name={'name'}
-                      onChange={({ target: { value } }) => this.updateName(value)}
                       type={'text'}
                       variant={'outlined'}
                     />
                     <br/>
                     <Select
                       value={this.state.user.gender}
+                      disabled
                       fullWidth
                       id={'gender'}
                       label={'Gender'}
                       name={'gender'}
-                      onChange={({ target: { value } }) => this.updateGender(value)}
                       variant={'outlined'}
                     >
                       <MenuItem value={`Female`}>Female</MenuItem>
@@ -208,37 +294,47 @@ class Profile extends React.Component {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
                         disableToolbar
+                        disabled
                         variant="inline"
                         format="dd/MM/yyyy"
                         margin="normal"
                         id="date-picker-inline"
                         label="Data nascimento"
                         value={this.state.user.date}
-                        onChange={(date) => this.updateDate(date)}
                         KeyboardButtonProps={{
                           'aria-label': 'change date',
                         }}
                       />
                     </MuiPickersUtilsProvider>
-                    <Button className={useStyles.submit}
-                      color={'primary'}
-                      fullWidth
-                      onClick={this.changeDetails}
-                      style={{ marginTop: '20px' }}
-                      variant={'contained'}
-                    >
-                        Update
-                    </Button>
                   </form>
+                  )}
                 </div>
                 <br />
-                <Link href={`/users/${this.state.userId}/friends`}>
+                {this.state.userId == this.state.user.id ? (
+                  <div>
+                  <Link href={`/users/${this.state.user.id}/friends`}>
+                    <Button color={'secondary'}
+                      justify={'center'}
+                      variant={'contained'}
+                      width={50}
+                    >Amigos</Button>
+                  </Link>
+                  <br/>
                   <Button color={'secondary'}
                     justify={'center'}
                     variant={'contained'}
                     width={50}
-                  >Amigos</Button>
-                </Link>
+                    onClick={this.logOut}
+                    >Logout</Button>
+                    </div>
+                ) : (
+                  <Button color={'secondary'}
+                  justify={'center'}
+                  variant={'contained'}
+                  width={50}
+                  onClick={this.addFriend}
+                  >Adicionar</Button>
+                )}
               </Container>
             </Grid>
           </Grid>
