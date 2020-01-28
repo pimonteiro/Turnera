@@ -28,7 +28,11 @@ Groups.showGroup = (session, req, res) => {
       let ret = data.records[0].get('g').properties;
       
       data.records.forEach(record => {
-        members.push(record.get('u').properties.id)
+        let user = {
+          'id': record.get('u').properties.id,
+          'name': record.get('u').properties.name
+        }
+        members.push(user)
       });
       
       ret.members = members;
