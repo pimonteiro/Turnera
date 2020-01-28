@@ -49,6 +49,7 @@ UserPosts.indexUserPosts = async (session, req, res) => {
 };
 
 UserPosts.showUserPost = (session, req, res) => {
+  console.log(req.params);
   session.run(
     'MATCH (p:Post { id: $pid })-[r]-(a) RETURN p, r, a',
     { pid: req.params.pid }

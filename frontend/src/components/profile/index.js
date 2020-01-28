@@ -89,7 +89,7 @@ class Profile extends React.Component {
   componentDidMount() {
     this.getPosts().then(posts => {
       this.setState({ posts: slice(posts.data) });
-    }).catch(() => console.log("1"));
+    });
   
     this.getUser().then(user => {
       var dummy = user.data
