@@ -21,8 +21,8 @@ class FriendList extends React.Component {
     return await getResource(`users/${this.state.userId}/friends`);
   };
 
-  removeFriend(ind) {
-    deleteResource(`users/${this.state.userId}/friends/${ind}`)
+  removeFriend(friend) {
+    deleteResource(`users/${this.state.userId}/friends/${friend.id}`)
       .then(res => {
         this.props.history.push(`/users/${this.state.userId}/friends`);
       })
@@ -58,7 +58,7 @@ class FriendList extends React.Component {
                 <Grid item
                   xs={12}
                 >
-                  <Avatar />
+                  <Avatar src={friend.image}/>
                 </Grid>
                 <Grid item
                   xs={12}
@@ -72,7 +72,7 @@ class FriendList extends React.Component {
               </Grid>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeFriend}>Remove</Button>
+              <Button onClick={() => this.removeFriend(friend)}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>
