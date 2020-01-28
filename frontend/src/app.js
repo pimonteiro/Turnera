@@ -23,7 +23,8 @@ export default class App extends React.Component {
   }
 
   userLoggedIn = state => {
-    createResource(state.type, { email: state.email, password: state.password })
+    console.log(state)
+    createResource(state.type, { email: state.email, password: state.password, name: state.name, gender: state.gender, date: state.date })
       .then(raw => {
         localStorage.setItem('loggedIn', 'true');
         localStorage.setItem('token', raw.data.token);
