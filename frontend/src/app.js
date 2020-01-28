@@ -1,11 +1,11 @@
 import { BrowserRouter, Route } from 'react-router-dom';
-import { Home } from './components/home';
 import { createResource } from './components/api-handler';
 
 import FriendList from './components/friends';
 import FriendRequests from './components/friend-requests';
 import Group from './components/groups/show';
 import GroupList from './components/groups';
+import Home from './components/home';
 import Navbar from './components/navbar/bar';
 import Post from './components/posts/show';
 import Profile from './components/profile';
@@ -13,7 +13,6 @@ import React from 'react';
 import Signin from './components/session/signin';
 import Signup from './components/session/signup';
 import Switch from 'react-bootstrap/cjs/Switch';
-import NotFound from './components/404';
 
 export default class App extends React.Component {
 
@@ -34,7 +33,7 @@ export default class App extends React.Component {
         this.setState({ userId: raw.data.id, userName: state.name });
       })
       .catch(err => {
-        
+      
       })
   };
 
@@ -44,7 +43,7 @@ export default class App extends React.Component {
         <Navbar userId={this.state.userId}/>
         <Switch>
           <Route
-            component={Home}
+            component={(props) => <Home userId={this.state.userId} />}
             exact
             path={'/'}
           />

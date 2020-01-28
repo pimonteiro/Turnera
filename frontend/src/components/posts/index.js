@@ -19,8 +19,7 @@ export default class Posts extends React.Component {
   }
 
   getPosts = async () => {
-    // TODO:
-    return await getResource(`users/${this.state.userId}/posts`);
+    return await getResource(`user_feed/${this.state.userId}`);
   };
 
   componentDidMount() {
