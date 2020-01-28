@@ -13,14 +13,13 @@ import {
 
 import React from 'react';
 import SubmitFile from '../submit-file/index';
-var moment = require('moment');
+import moment from 'moment';
 
 class Profile extends React.Component {
 
   constructor(props) {
     super(props);
 
-    console.log(props)
     this.state = {
       open: false,
       posts: [],
@@ -88,19 +87,17 @@ class Profile extends React.Component {
 
   componentDidMount() {
     this.getPosts().then(posts => {
-      this.getUser().then(user => {
-        var dummy = user.data
-        var d1 = moment(dummy.date,"DD-MM-YYYY")
-        dummy.date = d1.toDate()
-        this.setState({ posts: slice(posts.data), user: dummy });
-        console.log(this.state.user)
-      });
-    });
+      this.setState({ posts: slice(posts.data) });
+    }).catch(() => console.log("1"));
+  
+    this.getUser().then(user => {
+      this.setState({ user: user.data });
+    }).catch(() => console.log("2"));
   }
 
   render() {
-    console.log(this.state.userId)
-    console.log(this.state.user.id)
+    console.log(this.state);
+    
     return (
       <Grid container>
         <Grid item
@@ -167,7 +164,7 @@ class Profile extends React.Component {
                           </Button>
                         </DialogActions>
                       </Dialog>
-                    </div>  
+                    </div>
                     ) : (
                       <br/>
                     )}
