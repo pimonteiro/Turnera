@@ -17,9 +17,13 @@ class GroupList extends React.Component {
     this.removeGroup = this.removeGroup.bind(this);
   }
 
-  removeGroup = async (ind) => {
-    this.props.history.push(`/users/${this.state.userId}/groups`)
-    return await deleteResource(`users/${this.state.userId}/groups/${ind}`)
+  removeGroup = async (group) => {
+    deleteResource(`users/${this.state.userId}/groups/${group.id}`)
+      .then(() => {
+        this.getGroups().then(res => {
+          onChange(this,res.data, 'groups')
+        })
+      })
   }
 
   getGroups = async () => {
@@ -48,13 +52,13 @@ class GroupList extends React.Component {
           <Card style={{ textAlign: 'center' }}>
             <CardContent>
               <Typography color={'textSecondary'}>
-                <Link href={`/users/${this.state.userId}/groups/${group.id}`}>
+                <Link href={`/groups/${group.id}`}>
                   {group.name}
                 </Link>
               </Typography>
             </CardContent>
             <CardActions>
-              <Button onClick={this.removeGroup}>Remove</Button>
+              <Button onClick={() => this.removeGroup(group)}>Remove</Button>
             </CardActions>
           </Card>
         </Grid>

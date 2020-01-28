@@ -8,19 +8,24 @@ import Feed from '../posts';
 import React from 'react';
 import Typography from '@material-ui/core/Typography';
 
-import { getResource, deleteResource } from '../api-handler';
+import { getResource, deleteResource, createResource } from '../api-handler';
 
 class Group extends React.Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      group: "",
+      group: {
+        name: "",
+        id: "",
+        members: []
+      },
       groupId: props.match.params.groupId,
-      userId: props.match.params.userId
+      userId: props.loggedInUser
     };
 
     this.exitGroup = this.exitGroup.bind(this);
+    this.enterGroup = this.enterGroup.bind(this)
   }
 
   exitGroup() {
@@ -33,8 +38,31 @@ class Group extends React.Component {
       });
   }
 
+  enterGroup() {
+    createResource(`users/${this.state.userId}/groups/${this.state.groupId}`)
+      .then(() => {
+        this.getGroup()
+          .then(res => {
+              onChange(this,res.data, 'group')
+            })
+      })
+      .catch(res => {
+        console.log(res);
+      });
+  }
+
   getGroup = async () => {
     return await getResource(`groups/${this.state.groupId}`)  
+  }
+
+  isMember = () => {
+    var tmp = this.state.group.members.map((m) => {
+      return m.id
+    })
+    if(tmp.includes(this.state.userId))
+      return true
+    else
+      return false
   }
 
   componentDidMount() {
@@ -56,7 +84,7 @@ class Group extends React.Component {
     }
     
     this.state.group.members.forEach(element => {
-      membersList.push(<a href={`/users/${element.id}`}>Temp </a>);
+      membersList.push(<a href={`/users/${element.id}`}>{element.name} </a>);
     });
 
     return membersList
@@ -86,7 +114,14 @@ class Group extends React.Component {
             >
               {this.state.group.name}
             </Typography>
-            <Feed type='group'/>
+            {this.isMember() ? (
+              <Feed type='group'/>
+            ) : (
+              <div>
+                <br/>
+                <p>Não tem acesso ao conteúdo deste grupo.</p>
+              </div>
+            )}
           </Grid>
           <Grid item
             xs={4}
@@ -113,13 +148,24 @@ class Group extends React.Component {
                   <br />
                   {this.state.descr}
                 </div>
-                <Button
+                {this.isMember() ? (
+                    <Button
+                    color={'secondary'}
+                    onClick={this.exitGroup}
+                    variant={'contained'}
+                  >
+                        Sair do Grupo
+                  </Button>
+                ) : (
+                  <Button
                   color={'secondary'}
-                  onClick={this.exitGroup}
+                  onClick={this.enterGroup}
                   variant={'contained'}
-                >
-                      Sair do Grupo
+                  >
+                      Entrar no grupo
                 </Button>
+                )}
+
               </Grid>
             </Grid>
           </Grid>

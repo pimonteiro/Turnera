@@ -54,9 +54,9 @@ export default class App extends React.Component {
             path={'/posts/:postId'}
           />
           <Route
-            component={Group}
+            component={(props) => <Group {...props} loggedInUser={this.state.userId} />}
             exact
-            path={'/users/:userId/groups/:groupId'}
+            path={'/groups/:groupId'}
           />
           <Route
             component={(props) => <Profile {...props} loggedInUser={this.state.userId} />}
