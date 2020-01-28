@@ -1,5 +1,7 @@
 import { BrowserRouter, Route } from 'react-router-dom';
 import { Home } from './components/home';
+import { createResource } from './components/api-handler';
+
 import FriendList from './components/friends';
 import FriendRequests from './components/friend-requests';
 import Group from './components/groups/show';
@@ -21,13 +23,14 @@ export default class App extends React.Component {
   }
 
   userLoggedIn = state => {
-    // TODO: GET USER API AND VERIFY CREDENTIALS
-    console.log(`${state.type} ${state.password} ${state.email}`);
+    createResource(state.type, { email: state.email, password: state.password })
+      .then(raw => {
+        localStorage.setItem('loggedIn', 'true');
+        localStorage.setItem('token', raw.data.token);
+        localStorage.setItem('userId', raw.data.id);
 
-    localStorage.setItem('loggedIn', 'true');
-    localStorage.setItem('userId', 'd83b49b9-9cd0-4235-b145-efb790741832');
-
-    this.setState({ userId: 'd83b49b9-9cd0-4235-b145-efb790741832' });
+        this.setState({ userId: raw.data.id });
+      });
   };
 
   render() {
@@ -73,10 +76,14 @@ export default class App extends React.Component {
         </Switch>
       </BrowserRouter> : <BrowserRouter>
         <Switch>
-          <Route path={'/'}>
+          <Route exact
+            path={'/'}
+          >
             <Signin callback={this.userLoggedIn} />
           </Route>
-          <Route path={'/register'}>
+          <Route exact
+            path={'/register'}
+          >
             <Signup callback={this.userLoggedIn} />
           </Route>
         </Switch>

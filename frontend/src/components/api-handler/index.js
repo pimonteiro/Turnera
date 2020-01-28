@@ -3,7 +3,11 @@ import axios from 'axios';
 const host = process.env.REACT_APP_API_HOST;
 
 function createUrl(resource) {
-  return `${host}/${resource}`;
+  if (resource.startsWith('sign')) {
+    return `${host}/${resource}`;
+  }
+
+  return `${host}/${resource}?token=${localStorage.getItem('token')}`;
 }
 
 export const getResource = async resource => {
@@ -30,8 +34,8 @@ export const deleteResource = async resource => {
   return await axios.delete(url);
 };
 
-export const updateResource = async (resource, data)  => {
+export const updateResource = async (resource, data) => {
   const url = createUrl(resource);
 
   return await axios.put(url, data);
-}
+};
