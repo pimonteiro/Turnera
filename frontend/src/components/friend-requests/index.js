@@ -19,27 +19,27 @@ export default class FriendRequests extends React.Component {
   }
 
   getFriendRequests = async () => {
-    return await getResource(`users/${this.state.userId}/friend-requests`)
-  }
+    return await getResource(`users/${this.state.userId}/friend-requests`);
+  };
 
   acceptFriend = friend => {
     createResource(`users/${friend.invited}/friend-requests/${friend.user.id}`)
       .then(() => {
-        this.props.history.push(`/users/${this.state.userId}/friends-requests`)
+        this.props.history.push(`/users/${this.state.userId}/friends-requests`);
       })
       .catch(res => {
-        console.log(res)
-      })
-  }
+        console.log(res);
+      });
+  };
 
-  componentDidMount(){
+  componentDidMount() {
     this.getFriendRequests()
       .then(res => {
         onChange(this, res.data, 'friendRequests')
       })
       .catch(res => {
-        console.log(res)
-      })
+        console.log(res);
+      });
   }
 
   renderFriendRequests() {
@@ -57,7 +57,7 @@ export default class FriendRequests extends React.Component {
                 <Avatar
                   alt={'user_image'}
                   className={'my-3'}
-                  //src={friendRequest.user.image}
+                  src={friendRequest.image}
                   style={{ height: '100px', marginRight: '10px', width: '100px' }}
                 />
                 <a href={`/users/${friendRequest.id}`}>

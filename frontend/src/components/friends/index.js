@@ -3,8 +3,6 @@ import { deleteResource, getResource } from '../api-handler';
 import { onChange } from '..';
 
 import React from 'react';
-import { getResource, deleteResource } from '../api-handler';
-import { onChange } from '..';
 
 class FriendList extends React.Component {
 

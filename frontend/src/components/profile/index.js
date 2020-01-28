@@ -38,7 +38,7 @@ class Profile extends React.Component {
   changeDetails() {
     updateResource(`users/${this.state.userId}/`, { name: this.state.data.name, gender: this.state.data.gender })
       .then(() => {
-        console.log("Done")
+        console.log('Done');
       })
       .catch(res => {
         console.log(`Could not change details: ${res}`);
@@ -49,16 +49,26 @@ class Profile extends React.Component {
     return await getResource(`users/${this.state.userId}/posts`);
   };
 
+  getUser = async () => {
+    return await getResource(`users/${this.state.userId}`);
+  };
+
   componentDidMount() {
     this.getPosts().then(posts => {
       this.setState({
-        posts: slice(posts.data),
-        user: posts.data.length > 0 ? posts.data[0].owner : {}
+        posts: slice(posts.data)
+      });
+    });
+
+    this.getUser().then(user => {
+      this.setState({
+        user: user.data
       });
     });
   }
 
   render() {
+    console.log(this.state.user);
     return (
       <Grid container>
         <Grid item
@@ -136,11 +146,11 @@ class Profile extends React.Component {
                       label={'Email Address'}
                       margin={'normal'}
                       name={'email'}
-                      value={this.state.user.email}
+                      //value={this.state.user.email}
                       variant={'outlined'}
                     />
                     <TextField
-                      defaultValue={this.state.user.name}
+                      //defaultValue={this.state.user.name}
                       fullWidth
                       id={'name'}
                       label={'Name'}
@@ -151,12 +161,12 @@ class Profile extends React.Component {
                       variant={'outlined'}
                     />
                     <Select
-                      value={this.state.user.gender}
                       fullWidth
                       id={'gender'}
                       label={'Gender'}
                       name={'gender'}
                       onChange={({ target: { value } }) => onChange(this, value, 'user.gender')}
+                      value={this.state.user.gender}
                       variant={'outlined'}
                     >
                       <MenuItem value={`Female`}>Female</MenuItem>
