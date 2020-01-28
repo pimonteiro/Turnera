@@ -6,7 +6,6 @@ import React from 'react';
 import _ from 'underscore';
 import {onChange} from '../index';
 import { createResource } from '../api-handler';
-import {upload_file} from '../submit-file/azure';
 
 export default class CreatePost extends React.Component {
 
@@ -25,15 +24,15 @@ export default class CreatePost extends React.Component {
   submit = () => {
     const text = this.state.newPostContent;
     const hashtags = _.uniq(text.match(/(#[a-z\d-]+)/ig)) || [];
-    upload_file(this.state.newPostFile)
-      .then(url => {
+    createResource(`link`, {file: this.state.newPostFile})
+      .then(res => {
         if(this.state.type === 'feed'){
           createResource(`users/${this.state.userId}/posts`, {
             text: text,
             hashtags: hashtags,
             owner:this.state.userId,
             group: "",
-            images: [url]
+            images: [res.url]
           })  
             .then(res => {
               this.props.history.push(`/users/${this.state.userId}`)
@@ -45,7 +44,7 @@ export default class CreatePost extends React.Component {
             hashtags: hashtags,
             owner:this.state.userId,
             group: this.state.groupId,
-            images: [url]
+            images: [res.url]
           })
             .then(res => {
               this.props.history.push(`/users/${this.state.userId}/groups/${this.state.groupId}`)

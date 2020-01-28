@@ -4,7 +4,6 @@ import Button from '@material-ui/core/Button';
 import React from 'react';
 
 import {createResource, updateResource} from '../api-handler'
-import {upload_file, upload_image} from './azure'
 class SubmitFile extends React.Component {
 
   constructor(props) {
@@ -17,9 +16,9 @@ class SubmitFile extends React.Component {
   }
 
     sendFile = () => {
-      upload_image(this.state.file)
-        .then(url => {
-          this.props.object.image= url
+      createResource(`link`, {file: this.state.file})
+        .then(res => {
+          this.props.object.image = res.url
           updateResource(this.props.link, this.props.object)
           .then(() => {
             this.props.history.push(this.props.return);

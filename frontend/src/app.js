@@ -34,7 +34,7 @@ export default class App extends React.Component {
         this.setState({ userId: raw.data.id, userName: state.name });
       })
       .catch(err => {
-        this.setState({error: err})
+        
       })
   };
 
@@ -64,7 +64,7 @@ export default class App extends React.Component {
             path={'/users/:userId'}
           />
           <Route
-            component={(props) => <FriendRequests {...props} loggedInUser={this.state.userId} />}
+            component={FriendRequests}
             exact
             path={'/users/:userId/friends-requests'}
           />
@@ -81,15 +81,15 @@ export default class App extends React.Component {
         </Switch>
       </BrowserRouter> : <BrowserRouter>
         <Switch>
-          <Route exact
-            path={'/'}
-          >
-            <Signin callback={this.userLoggedIn} />
-          </Route>
-          <Route exact
+        <Route exact
             path={'/register'}
           >
             <Signup callback={this.userLoggedIn}/>
+          </Route>
+          <Route
+            path={'/'}
+          >
+            <Signin callback={this.userLoggedIn} />
           </Route>
         </Switch>
       </BrowserRouter>

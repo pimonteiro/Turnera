@@ -15,13 +15,14 @@ export default class Post extends React.Component {
 
     this.state = {
       comments: [],
-      post: []
+      post: [],
+      postId: props.match.params.postId
     };
   }
 
   componentDidMount() {
-    getResource(`users/${this.state.userId}/posts`).then(posts => {
-      this.setState({ posts: slice(posts.data) });
+    getResource(`users/${this.state.postId}/posts`).then(post => {
+      this.setState({ post: post.data });
     });
   }
 

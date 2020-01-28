@@ -5,7 +5,6 @@ import Button from '@material-ui/core/Button';
 import React from 'react';
 import { getResource, createResource } from '../api-handler';
 import {onChange} from '../index'
-import NotFound from '../404';
 
 export default class FriendRequests extends React.Component {
 
@@ -14,14 +13,13 @@ export default class FriendRequests extends React.Component {
 
     this.state = {
       friendRequests: [],
-      userId: props.loggedInUser,
-      id: props.match.params.userId
+      userId: props.match.params.userId
     };
     this.acceptFriend = this.acceptFriend.bind(this)
   }
 
   getFriendRequests = async () => {
-    return await getResource(`users/${this.state.id}/friend-requests`);
+    return await getResource(`users/${this.state.userId}/friend-requests`);
   };
 
   acceptFriend = friend => {
@@ -86,22 +84,14 @@ export default class FriendRequests extends React.Component {
 
   render() {
     return (
-      <div>
-        {this.state.id != this.state.userId ? (
-          <div>
-            <NotFound/>
-          </div>
-        ) : (
-          <Grid
-          alignItems={'center'}
-          container
-          direction={'column'}
-          justify={'center'}
-        >
-          { this.renderFriendRequests() }
-        </Grid>
-        )}
-      </div>
+      <Grid
+        alignItems={'center'}
+        container
+        direction={'column'}
+        justify={'center'}
+      >
+        { this.renderFriendRequests() }
+      </Grid>
     );
   }
 

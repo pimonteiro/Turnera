@@ -62,18 +62,14 @@ class Profile extends React.Component {
   }
 
   logOut() {
-    deleteResource(`users/${this.state.userId}`)
-      .then(res =>  {
-        // Remove session and other pending stuff
-        this.props.history.push('/');
-      })
-      .catch(res => {
-        console.log(`Could not remove account: ${res}`);
-      });
+    localStorage.removeItem('loggedIn');
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    this.props.history.push('/')
   }
 
   changeDetails() {
-    updateResource(`users/${this.state.userId}/`, {name: this.state.user.name, gender: this.state.user.gender, date: moment(this.state.user.date,"DD-MM-YYYY").format("DD/MM/YYYY").toString()})
+    updateResource(`users/${this.state.userId}/`, {image: this.state.user.image,name: this.state.user.name, gender: this.state.user.gender, date: moment(this.state.user.date,"DD-MM-YYYY").format("DD/MM/YYYY").toString()})
       .then(() => {
         console.log("Done")
       })
@@ -300,13 +296,26 @@ class Profile extends React.Component {
                   )}
                 </div>
                 <br />
-                <Link href={`/users/${this.state.user.id}/friends`}>
+                {this.state.userId == this.state.user.id ? (
+                  <div>
+                  <Link href={`/users/${this.state.user.id}/friends`}>
+                    <Button color={'secondary'}
+                      justify={'center'}
+                      variant={'contained'}
+                      width={50}
+                    >Amigos</Button>
+                  </Link>
+                  <br/>
                   <Button color={'secondary'}
                     justify={'center'}
                     variant={'contained'}
                     width={50}
-                  >Amigos</Button>
-                </Link>
+                    onClick={this.logOut}
+                    >Logout</Button>
+                    </div>
+                ) : (
+                  <br/>
+                )}
               </Container>
             </Grid>
           </Grid>

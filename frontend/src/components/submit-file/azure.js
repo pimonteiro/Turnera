@@ -1,6 +1,5 @@
 const { ClientSecretCredential } = require("@azure/identity");
 const { BlobServiceClient } = require("@azure/storage-blob");
-var fs = require('fs')
 
 const account = "turnera";
 const defaultAzureCredential = new ClientSecretCredential(
@@ -15,13 +14,12 @@ const blobServiceClient = new BlobServiceClient(
 );
 
 
-async function upload_image(path_to_file) {
+export async function upload_image(data) {
     const containerName = "images";
     const containerClient = blobServiceClient.getContainerClient(containerName);
 
 
-    var data = fs.readFileSync(path_to_file)
-    var blobName = path_to_file.split('/')
+    var blobName = data.split('/')
     blobName = blobName[blobName.length -1]
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
     const uploadBlobResponse = await blockBlobClient.upload(data, data.length);
@@ -29,12 +27,11 @@ async function upload_image(path_to_file) {
     return "https://turnera.blob.core.windows.net/" + containerName + "/" + blobName
 }
 
-async function upload_file(path_to_file) {
+export async function upload_file(data) {
     const containerName = "files";
     const containerClient = blobServiceClient.getContainerClient(containerName);
 
 
-    var data = fs.readFileSync(path_to_file)
     var blobName = path_to_file.split('/')
     blobName = blobName[blobName.length -1]
     const blockBlobClient = containerClient.getBlockBlobClient(blobName);
@@ -43,13 +40,13 @@ async function upload_file(path_to_file) {
     return "https://turnera.blob.core.windows.net/" + containerName + "/" + blobName
 }
 
-upload_image('/home/leonardo/Downloads/test')
-    .then((url) => {
-        console.log(url)
-    })
-    .catch((ex) => {
-        console.log(ex.message)
-    });
+//upload_image('/home/leonardo/Downloads/test')
+ //   .then((url) => {
+  //      console.log(url)
+   // })
+   // .catch((ex) => {
+   //     console.log(ex.message)
+    //});
 //
 //upload_file('/path/to/file')
 //    .then((url) => {
