@@ -86,7 +86,7 @@ class Group extends React.Component {
             >
               {this.state.group.name}
             </Typography>
-            <Feed />
+            <Feed type='group'/>
           </Grid>
           <Grid item
             xs={4}

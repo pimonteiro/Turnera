@@ -40,6 +40,7 @@ export default class Posts extends React.Component {
         <CreatePost
           groupId={this.state.groupId}
           userId={this.state.userId}
+          type='feed'
         />
         { renderPosts(this.state.posts) }
       </Grid>

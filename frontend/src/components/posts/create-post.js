@@ -4,6 +4,9 @@ import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import React from 'react';
 import _ from 'underscore';
+import {onChange} from '../index';
+import { createResource } from '../api-handler';
+import {upload_file} from '../submit-file/azure';
 
 export default class CreatePost extends React.Component {
 
@@ -13,6 +16,8 @@ export default class CreatePost extends React.Component {
     this.state = {
       groupId: props.groupId,
       newPostContent: '',
+      newPostFile: '',
+      type: props.type, 
       userId: props.userId
     };
   }
@@ -20,9 +25,33 @@ export default class CreatePost extends React.Component {
   submit = () => {
     const text = this.state.newPostContent;
     const hashtags = _.uniq(text.match(/(#[a-z\d-]+)/ig)) || [];
-
-    console.log(text);
-    console.log(hashtags);
+    upload_file(this.state.newPostFile)
+      .then(url => {
+        if(this.state.type === 'feed'){
+          createResource(`users/${this.state.userId}/posts`, {
+            text: text,
+            hashtags: hashtags,
+            owner:this.state.userId,
+            group: "",
+            images: [url]
+          })  
+            .then(res => {
+              this.props.history.push(`/users/${this.state.userId}`)
+            })
+        }
+        else{
+          createResource(`groups/${this.state.groupId}/posts`,{
+            text: text,
+            hashtags: hashtags,
+            owner:this.state.userId,
+            group: this.state.groupId,
+            images: [url]
+          })
+            .then(res => {
+              this.props.history.push(`/users/${this.state.userId}/groups/${this.state.groupId}`)
+            })
+        }
+      })
   };
 
   render() {
@@ -38,6 +67,14 @@ export default class CreatePost extends React.Component {
           onChange={e => this.setState({ newPostContent: e.target.value })}
           placeholder={'Em que estás a pensar?'}
         />
+        <div>
+          <input
+            accept={'file/*'}
+            id={'contained-button-file'}
+            onChange={({ target: { value } }) => onChange(this, value, 'newPostFile')}
+            type={'file'}
+          />
+        </div>
         <Button
           color={'primary'}
           onClick={this.submit}

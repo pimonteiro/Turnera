@@ -20,7 +20,7 @@ export default class App extends React.Component {
   constructor(props) {
     super(props);
 
-    this.state = { userId: localStorage.getItem('userId'), error: "" };
+    this.state = { userId: localStorage.getItem('userId')};
   }
 
   userLoggedIn = state => {
@@ -31,7 +31,7 @@ export default class App extends React.Component {
         localStorage.setItem('token', raw.data.token);
         localStorage.setItem('userId', raw.data.id);
 
-        this.setState({ userId: raw.data.id });
+        this.setState({ userId: raw.data.id, userName: state.name });
       })
       .catch(err => {
         this.setState({error: err})
@@ -41,7 +41,7 @@ export default class App extends React.Component {
   render() {
     return (
       localStorage.getItem('loggedIn') === 'true' ? <BrowserRouter>
-        <Navbar userId={this.state.userId} />
+        <Navbar userId={this.state.userId} userName={this.state.userName}/>
         <Switch>
           <Route
             component={Home}
@@ -59,28 +59,24 @@ export default class App extends React.Component {
             path={'/users/:userId/groups/:groupId'}
           />
           <Route
-            component={Profile}
+            component={(props) => <Profile {...props} loggedInUser={this.state.userId} />}
             exact
             path={'/users/:userId'}
           />
           <Route
-            component={FriendRequests}
+            component={(props) => <FriendRequests {...props} loggedInUser={this.state.userId} />}
             exact
             path={'/users/:userId/friends-requests'}
           />
           <Route
-            component={GroupList}
+            component={(props) => <GroupList {...props} loggedInUser={this.state.userId} />}
             exact
             path={'/users/:userId/groups'}
           />
           <Route
-            component={FriendList}
+            component={(props) => <FriendList {...props} loggedInUser={this.state.userId} />}
             exact
             path={'/users/:userId/friends'}
-          />
-          <Route
-            component={NotFound}
-            path="*"
           />
         </Switch>
       </BrowserRouter> : <BrowserRouter>
@@ -95,10 +91,6 @@ export default class App extends React.Component {
           >
             <Signup callback={this.userLoggedIn}/>
           </Route>
-          <Route
-            component={NotFound}
-            path="*"
-          />
         </Switch>
       </BrowserRouter>
     );

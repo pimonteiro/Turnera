@@ -20,20 +20,23 @@ class Profile extends React.Component {
   constructor(props) {
     super(props);
 
+    console.log(props)
     this.state = {
       open: false,
       posts: [],
-      userId: props.match.params.userId,
+      userId: props.loggedInUser,
       user : {
         name: 'loading...',
         email: 'loading...',
         gender: 'Unknown',
-        date: new Date()
+        date: new Date(),
+        image: '',
+        id: props.match.params.userId
       }
     };
 
     this.changeDetails = this.changeDetails.bind(this);
-    this.removeAccount = this.removeAccount.bind(this);
+    this.logOut = this.logOut.bind(this);
     this.updateName = this.updateName.bind(this);
     this.updateGender = this.updateGender.bind(this);
     this.updateDate = this.updateDate.bind(this);
@@ -58,7 +61,7 @@ class Profile extends React.Component {
     this.setState({user: dummy_user})
   }
 
-  removeAccount() {
+  logOut() {
     deleteResource(`users/${this.state.userId}`)
       .then(res =>  {
         // Remove session and other pending stuff
@@ -80,11 +83,11 @@ class Profile extends React.Component {
   }
 
   getPosts = async () => {
-    return await getResource(`users/${this.state.userId}/posts`);
+    return await getResource(`users/${this.state.user.id}/posts`);
   };
 
   getUser = async () => {
-    return await getResource(`users/${this.state.userId}`);
+    return await getResource(`users/${this.state.user.id}`);
   };
 
   componentDidMount() {
@@ -100,6 +103,8 @@ class Profile extends React.Component {
   }
 
   render() {
+    console.log(this.state.userId)
+    console.log(this.state.user.id)
     return (
       <Grid container>
         <Grid item
@@ -126,13 +131,14 @@ class Profile extends React.Component {
                     <img
                       alt={'...'}
                       className={'img-circle img-no-padding img-responsive'}
-                      //src={this.state.user.pic}
+                      src={this.state.user.image}
                       style={{
                         height: 200,
                         width: 200
                       }}
                     />
-                    <div>
+                    {this.state.userId == this.state.user.id ? (
+                      <div>
                       <label htmlFor={'icon-button-file'}>
                         <IconButton aria-label={'upload picture'}
                           color={'primary'}
@@ -151,9 +157,10 @@ class Profile extends React.Component {
                           <DialogContentText>
                                     Upload image
                           </DialogContentText>
-                          <SubmitFile link={'/....'}
+                          <SubmitFile link={`users/${this.state.userId}`}
                             return={`/users/${this.state.userId }`}
                             type={'image'}
+                            object={this.state.user}
                           />
                         </DialogContent>
                         <DialogActions>
@@ -164,9 +171,78 @@ class Profile extends React.Component {
                           </Button>
                         </DialogActions>
                       </Dialog>
-                    </div>
+                    </div>  
+                    ) : (
+                      <br/>
+                    )}
                   </div>
-                  <form className={useStyles.form}
+                  {this.state.userId == this.state.user.id ? (
+                      <form className={useStyles.form}
+                      noValidate
+                    >
+                      <TextField
+                        disabled
+                        fullWidth
+                        id={'email'}
+                        label={'Email Address'}
+                        margin={'normal'}
+                        name={'email'}
+                        value={this.state.user.email}
+                        variant={'outlined'}
+                      />
+                      <br/>
+                      <TextField
+                        value={this.state.user.name}
+                        fullWidth
+                        id={'name'}
+                        label={'Name'}
+                        margin={'normal'}
+                        name={'name'}
+                        onChange={({ target: { value } }) => this.updateName(value)}
+                        type={'text'}
+                        variant={'outlined'}
+                      />
+                      <br/>
+                      <Select
+                        value={this.state.user.gender}
+                        fullWidth
+                        id={'gender'}
+                        label={'Gender'}
+                        name={'gender'}
+                        onChange={({ target: { value } }) => this.updateGender(value)}
+                        variant={'outlined'}
+                      >
+                        <MenuItem value={`Female`}>Female</MenuItem>
+                        <MenuItem value={'Male'}>Male</MenuItem>
+                        <MenuItem value={'Unknown'}>Unknown</MenuItem>
+                      </Select>
+                      <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                        <KeyboardDatePicker
+                          disableToolbar
+                          variant="inline"
+                          format="dd/MM/yyyy"
+                          margin="normal"
+                          id="date-picker-inline"
+                          label="Data nascimento"
+                          value={this.state.user.date}
+                          onChange={(date) => this.updateDate(date)}
+                          KeyboardButtonProps={{
+                            'aria-label': 'change date',
+                          }}
+                        />
+                      </MuiPickersUtilsProvider>
+                      <Button className={useStyles.submit}
+                        color={'primary'}
+                        fullWidth
+                        onClick={this.changeDetails}
+                        style={{ marginTop: '20px' }}
+                        variant={'contained'}
+                      >
+                          Update
+                      </Button>
+                    </form>
+                  ) : (
+                    <form className={useStyles.form}
                     noValidate
                   >
                     <TextField
@@ -182,23 +258,23 @@ class Profile extends React.Component {
                     <br/>
                     <TextField
                       value={this.state.user.name}
+                      disabled
                       fullWidth
                       id={'name'}
                       label={'Name'}
                       margin={'normal'}
                       name={'name'}
-                      onChange={({ target: { value } }) => this.updateName(value)}
                       type={'text'}
                       variant={'outlined'}
                     />
                     <br/>
                     <Select
                       value={this.state.user.gender}
+                      disabled
                       fullWidth
                       id={'gender'}
                       label={'Gender'}
                       name={'gender'}
-                      onChange={({ target: { value } }) => this.updateGender(value)}
                       variant={'outlined'}
                     >
                       <MenuItem value={`Female`}>Female</MenuItem>
@@ -208,31 +284,23 @@ class Profile extends React.Component {
                     <MuiPickersUtilsProvider utils={DateFnsUtils}>
                       <KeyboardDatePicker
                         disableToolbar
+                        disabled
                         variant="inline"
                         format="dd/MM/yyyy"
                         margin="normal"
                         id="date-picker-inline"
                         label="Data nascimento"
                         value={this.state.user.date}
-                        onChange={(date) => this.updateDate(date)}
                         KeyboardButtonProps={{
                           'aria-label': 'change date',
                         }}
                       />
                     </MuiPickersUtilsProvider>
-                    <Button className={useStyles.submit}
-                      color={'primary'}
-                      fullWidth
-                      onClick={this.changeDetails}
-                      style={{ marginTop: '20px' }}
-                      variant={'contained'}
-                    >
-                        Update
-                    </Button>
                   </form>
+                  )}
                 </div>
                 <br />
-                <Link href={`/users/${this.state.userId}/friends`}>
+                <Link href={`/users/${this.state.user.id}/friends`}>
                   <Button color={'secondary'}
                     justify={'center'}
                     variant={'contained'}

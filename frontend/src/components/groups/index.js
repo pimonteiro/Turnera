@@ -3,6 +3,7 @@ import { Button, Card, CardActions, CardContent, Grid, Link, Typography } from '
 import React from 'react';
 import { getResource, deleteResource } from '../api-handler';
 import { onChange } from '..';
+import NotFound from '../404';
 
 class GroupList extends React.Component {
 
@@ -10,7 +11,8 @@ class GroupList extends React.Component {
     super(props);
     this.state = {
       groups: [],
-      userId: props.match.params.userId
+      userId: props.match.params.userId,
+      id: props.loggedInUser
     };
     this.removeGroup = this.removeGroup.bind(this);
   }
@@ -63,6 +65,13 @@ class GroupList extends React.Component {
   }
 
   render() {
+    if(this.state.id != this.state.userId){
+      return(
+        <div>
+          <NotFound/>
+        </div>
+      )
+    }
     return (
       <div>
         <Grid container
