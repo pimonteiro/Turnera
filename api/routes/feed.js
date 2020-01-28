@@ -10,8 +10,10 @@ const driver = neo4j.driver(
 
 const FeedController = require('../controllers/feedController');
 
-router.get('/users/:id/posts', (req, res) => {
+router.get('/user_feed/:id', (req, res) => {
     const session = driver.session();
     
-    UserPostsController.indexUserPosts(session, req, res);
+    FeedController.index(session, req, res);
 });
+
+module.exports = router
