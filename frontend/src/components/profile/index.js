@@ -84,6 +84,7 @@ class Profile extends React.Component {
   getUser = async () => {
     return await getResource(`users/${this.state.user.id}`);
   };
+  
 
   componentDidMount() {
     this.getPosts().then(posts => {
@@ -91,8 +92,11 @@ class Profile extends React.Component {
     }).catch(() => console.log("1"));
   
     this.getUser().then(user => {
-      this.setState({ user: user.data });
-    }).catch(() => console.log("2"));
+      var dummy = user.data
+      var d1 = moment(dummy.date,"DD-MM-YYYY")
+      dummy.date = d1.toDate()
+      this.setState({ user: dummy });
+    });
   }
 
   render() {
