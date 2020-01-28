@@ -16,6 +16,7 @@ const usersGroups = require('./routes/usersGroups');
 const usersPosts = require('./routes/usersPosts');
 const posts = require('./routes/posts');
 const auth = require('./routes/auth');
+const feed = require('./routes/feed');
 const AuthController = require("./controllers/auth");
 
 const app = express();
@@ -54,6 +55,7 @@ app.use('/api', usersFriends);
 app.use('/api', usersGroups);
 app.use('/api', usersPosts);
 app.use('/api', posts);
+app.use('/api', feed);
 
 
 app.use(function(req, res, next) {
