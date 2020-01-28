@@ -66,7 +66,8 @@ def create_user(tx, user):
             email: $email, 
             gender: $gender, 
             name: $name,
-            date: $date 
+            date: $date,
+            image: $image
             })
         CREATE (user)-[:lives_in]->(lives_in)
         CREATE (user)-[:home_town]->(home_town)
@@ -78,6 +79,7 @@ def create_user(tx, user):
         id = user['id'],
         ht_id = user['home_town'],
         liv_id = user['lives_in'],
+        image = user['image'],
         date = random_date("1/1/1970", "30/12/2009", random.random())
     )
 
@@ -241,16 +243,15 @@ def create_comments():
 def create_constraint():
     with driver.session() as session:
         tx = session.begin_transaction()
-        tx.run(
-            """
-            CREATE CONSTRAINT ON (n:User) ASSERT n.id IS UNIQUE
-            CREATE CONSTRAINT ON (n:City) ASSERT n.id IS UNIQUE
-            CREATE CONSTRAINT ON (n:Post) ASSERT n.id IS UNIQUE
-            CREATE CONSTRAINT ON (n:Group) ASSERT n.id IS UNIQUE
-            """
-        )
-        tx.commit()
 
+        tx.run("CREATE CONSTRAINT ON (n:User) ASSERT n.id IS UNIQUE")
+
+        tx.run("CREATE CONSTRAINT ON (n:City) ASSERT n.id IS UNIQUE")
+
+        tx.run("CREATE CONSTRAINT ON (n:Post) ASSERT n.id IS UNIQUE")
+
+        tx.run("CREATE CONSTRAINT ON (n:Group) ASSERT n.id IS UNIQUE")
+        tx.commit()
 
 
 create_constraint()
