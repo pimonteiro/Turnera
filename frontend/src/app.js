@@ -41,7 +41,7 @@ export default class App extends React.Component {
   render() {
     return (
       localStorage.getItem('loggedIn') === 'true' ? <BrowserRouter>
-        <Navbar userId={this.state.userId} userName={this.state.userName}/>
+        <Navbar userId={this.state.userId}/>
         <Switch>
           <Route
             component={Home}

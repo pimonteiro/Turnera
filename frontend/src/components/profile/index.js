@@ -57,15 +57,25 @@ class Profile extends React.Component {
   updateDate(v){
     var dummy_user = this.state.user
     dummy_user.date = v
-    console.log(dummy_user)
     this.setState({user: dummy_user})
   }
 
   logOut() {
-    localStorage.removeItem('loggedIn');
-    localStorage.removeItem('token');
-    localStorage.removeItem('userId');
-    this.props.history.push('/')
+    var dummy = this.state.user
+    delete dummy.token
+
+    updateResource(`users/${dummy.id}`, dummy)
+      .then(() => {
+        localStorage.setItem('loggedIn', false);
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+            
+        this.props.history.push('/')
+      })
+      .catch(res => {
+        console.log("Error: " + res)
+      })
+
   }
 
   addFriend() {
@@ -135,7 +145,7 @@ class Profile extends React.Component {
                   <Typography component={'h1'}
                     variant={'h3'}
                   >
-                        Profile
+                        Perfil
                   </Typography>
                   <div>
                     <img
@@ -248,7 +258,7 @@ class Profile extends React.Component {
                         style={{ marginTop: '20px' }}
                         variant={'contained'}
                       >
-                          Update
+                          Atualizar
                       </Button>
                     </form>
                   ) : (
@@ -319,6 +329,7 @@ class Profile extends React.Component {
                       width={50}
                     >Amigos</Button>
                   </Link>
+                  <br/>
                   <br/>
                   <Button color={'secondary'}
                     justify={'center'}

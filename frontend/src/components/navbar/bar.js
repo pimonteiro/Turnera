@@ -84,9 +84,9 @@ export default class Bar extends React.Component {
             </Form>
 
             <Nav className={'ml-auto mr-xl-5'}>
-              <Nav.Link href={`/users/${this.state.id}`}><MdPerson size={40} /> {this.state.name}</Nav.Link>
-              <Nav.Link href={`/users/${this.state.id}/friends-requests`}><MdGroupAdd size={40} /></Nav.Link>
-              <Nav.Link href={`/users/${this.state.id}/groups`}><MdGroup size={40} /></Nav.Link>
+              <Nav.Link href={`/users/${this.state.id}`}><MdPerson size={40} /> Perfil</Nav.Link>
+              <Nav.Link href={`/users/${this.state.id}/friends-requests`}><MdGroupAdd size={40} />Pedidos</Nav.Link>
+              <Nav.Link href={`/users/${this.state.id}/groups`}><MdGroup size={40} />Grupos</Nav.Link>
             </Nav>
           </Navbar>
         </div>
