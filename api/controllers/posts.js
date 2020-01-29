@@ -15,9 +15,10 @@ const dbDriver = require('../dbDriver');
 
 Posts.showPost = (session, req, res) => {
   console.log(req.params);
+  console.log('AQUI')
   session.run(
     'MATCH (p:Post { id: $pid })-[r]-(a) RETURN p, r, a',
-    { pid: req.params.pid }
+    { pid: req.params.id }
   )
     .then(data => {
       console.log(data);
