@@ -21,11 +21,9 @@ export default class Post extends React.Component {
   }
   
   newComment = (comment) => {
-    console.log(comment);
-    const cs = this.state.comments;
-    cs.push(comment);
-    
-    this.setState({ comments: cs })
+    getResource(`posts/${this.state.postId}`).then(post => {
+      this.setState({ post: post.data });
+    });
   };
 
   componentDidMount() {
@@ -41,8 +39,7 @@ export default class Post extends React.Component {
       renderedComments.push(<h3 key={0}>Sem comentários</h3>);
     }
 
-    com.forEach((comment, index) =>{
-      console.log(comment)
+    com.reverse().forEach((comment, index) =>{
       renderedComments.push(
         <Card
           className={'mb-5'}
@@ -75,7 +72,6 @@ export default class Post extends React.Component {
   };
 
   render() {
-    console.log(this.state);
     return (
       <Grid
         alignItems={'center'}

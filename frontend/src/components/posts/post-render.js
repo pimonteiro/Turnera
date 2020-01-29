@@ -25,17 +25,17 @@ function renderFiles(files){
 
   files.forEach((file, index) => {
     renderedFiles.push(
-      <div>
-      <a href={file}>{file}</a><br/>
-      </div>
+      <span key={index}>
+        <img style={{ maxWidth: '500px', maxHeight: '500px' }} src={file} alt={'post-file'} /><br/>
+      </span>
     )
-  })
+  });
 
   return renderedFiles;
 }
 
 function makeLike(post_id){
-  var user_id = localStorage.getItem('userId')
+  const user_id = localStorage.getItem('userId');
   createResource(`posts/${post_id}/like`, {user: user_id})
     .then(() => {
       console.log("Like done!")
