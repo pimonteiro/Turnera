@@ -40,10 +40,9 @@ GroupPosts.indexGroupPost = (session, req, res) => {
         let post = record.get('p').properties;
         let user = {};
         
-        user.name = record.get('u').properties.name;
-        user.id = record.get('u').properties.id;
+        user.name = record.get('u').properties;
         
-        post.user = user;
+        post.owner = user;
         
         ret.push(post)
       });
