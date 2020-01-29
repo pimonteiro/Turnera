@@ -2,14 +2,6 @@ const UserPosts = module.exports;
 const uuid4 = require('uuid4');
 const dbDriver = require('../dbDriver');
 
-const i = [
-  'https://upload.wikimedia.org/wikipedia/commons/thumb/a/a0/Pierre-Person.jpg/1200px-Pierre-Person.jpg',
-  'https://cdn.collider.com/wp-content/uploads/2017/10/the-gifted-amy-acker-02.jpg',
-  'https://i.ytimg.com/vi/7I8OeQs7cQA/maxresdefault.jpg',
-  'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80',
-  'https://i0.wp.com/cdn-prod.medicalnewstoday.com/content/images/articles/326/326738/a-woman-looking-pensive-because-of-cognitive-dissonance.jpg?w=1155&h=1730'
-];
-
 UserPosts.createUserPost = (session, req, res) => {
   req.body.id = uuid4();
   req.body.date = new Date().getTime();
@@ -40,7 +32,6 @@ UserPosts.indexUserPosts = async (session, req, res) => {
     const postJson = record.get('l').end.properties;
 
     postJson.owner = record.get('l').start.properties;
-    postJson.owner.image = i[Math.floor(Math.random() * i.length)];
 
     ret.push(postJson);
   });
