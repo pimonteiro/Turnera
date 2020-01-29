@@ -13,10 +13,8 @@ PostComments.createPostComment = (session, req, res) => {
       date: new Date().getTime()
     })
     .then(data => {
-      const c = data.records[0].get('r').properties;
-      
-      c.owner = data.records[0].get('u').properties;
-      c.owner.image =
+      var c = data.records[0].get('r').properties;
+      c.owner = data.records[0].get('u').properties
       
       res.jsonp(c);
     })
