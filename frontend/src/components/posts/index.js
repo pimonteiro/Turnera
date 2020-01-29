@@ -27,6 +27,12 @@ export default class Posts extends React.Component {
       this.setState({ posts: slice(res.data) });
     });
   }
+  
+  update = () => {
+    getResource(`user_feed/${this.state.userId}`).then(res => {
+      this.setState({ posts: slice(res.data) });
+    });
+  };
 
   render() {
     return (
@@ -40,6 +46,7 @@ export default class Posts extends React.Component {
           groupId={this.state.groupId}
           userId={this.state.userId}
           type='feed'
+          callback={this.update}
         />
         { renderPosts(this.state.posts) }
       </Grid>

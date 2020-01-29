@@ -16,12 +16,13 @@ export default class CreatePost extends React.Component {
       groupId: props.groupId,
       newPostContent: '',
       newPostFiles: [],
-      type: props.type, 
+      type: props.type,
       userId: props.userId,
       links: []
     };
 
-    this.uploadData = this.uploadData.bind(this)
+    this.uploadData = this.uploadData.bind(this);
+    this.callback = this.props.callback.bind(this);
   }
 
   submit = () => {
@@ -36,9 +37,10 @@ export default class CreatePost extends React.Component {
         group: "",
         images: this.state.links,
         likes: []
-      })  
+      })
         .then(res => {
           console.log("POST FEITO")
+          this.callback();
           //this.props.history.push(`/users/${this.state.userId}`)
         })
     }
@@ -53,6 +55,7 @@ export default class CreatePost extends React.Component {
       })
         .then(res => {
           console.log("POST FEITO")
+          this.callback();
           //this.props.history.push(`/users/${this.state.userId}/groups/${this.state.groupId}`)
         })
     }
