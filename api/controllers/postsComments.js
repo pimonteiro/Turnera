@@ -1,10 +1,11 @@
 const PostComments = module.exports;
 
 PostComments.createPostComment = (session, req, res) => {
+  
   session.run(
     "MATCH (p:Post { id: $pid }), (u:User { id: $uid}) \
     CREATE (u)-[r:comment { text: $text, date: $date }]->(p) \
-    RETURN r",
+    RETURN r, u",
     {
       pid: req.params.pid,
       uid: req.body.user,
@@ -12,12 +13,17 @@ PostComments.createPostComment = (session, req, res) => {
       date: new Date().getTime()
     })
     .then(data => {
-      res.jsonp(data.records[0].get('r').properties)
+      const c = data.records[0].get('r').properties;
+      
+      c.owner = data.records[0].get('u').properties;
+      c.owner.image =
+      
+      res.jsonp(c);
     })
     .catch(err => {
-      res.jsonp(err)
+      res.jsonp(err);
     })
     .then(() => {
-      session.close()
-    })
+      session.close();
+    });
 };

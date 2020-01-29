@@ -3,6 +3,7 @@ import { TextField } from '@material-ui/core';
 import Box from '@material-ui/core/Box';
 import Button from '@material-ui/core/Button';
 import React from 'react';
+import {createResource} from "../api-handler";
 
 export default class CreateComment extends React.Component {
 
@@ -11,14 +12,16 @@ export default class CreateComment extends React.Component {
 
     this.state = {
       newCommentContent: '',
-      postId: props.postId
+      postId: props.postId,
+      userId: props.userId
     };
+  
+    this.callback = this.props.callback.bind(this);
   }
 
   submit = () => {
-    const text = this.state.newCommentContent;
-
-    console.log(text);
+    createResource(`posts/${this.state.postId}/comment`, { user: this.state.userId, text: this.state.newCommentContent })
+      .then(res => this.callback(res.data));
   };
 
   render() {
@@ -31,7 +34,7 @@ export default class CreateComment extends React.Component {
           fullWidth
           margin={'normal'}
           multiline
-          onChange={e => this.setState({ newPostContent: e.target.value })}
+          onChange={e => this.setState({ newCommentContent: e.target.value })}
           placeholder={'Escreve um comentário...'}
         />
         <Button

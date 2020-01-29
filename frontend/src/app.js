@@ -42,7 +42,7 @@ export default class App extends React.Component {
               path={'/'}
             />
             <Route
-              component={Post}
+              component={(props) => <Post {...props} userId={this.state.userId} />}
               exact
               path={'/posts/:postId'}
             />

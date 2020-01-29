@@ -46,6 +46,7 @@ UserPosts.showUserPost = (session, req, res) => {
     { pid: req.params.pid }
   )
     .then(data => {
+      console.log(data);
       const ret = data.records[0].get('p').properties;
 
       ret.group = '';

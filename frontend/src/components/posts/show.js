@@ -1,7 +1,6 @@
 import { Grid } from '@material-ui/core';
 import { getResource } from '../api-handler';
 import { renderPost } from './post-render';
-import { slice } from '../index';
 
 import Avatar from '@material-ui/core/Avatar';
 import Card from 'react-bootstrap/Card';
@@ -16,13 +15,21 @@ export default class Post extends React.Component {
     this.state = {
       comments: [],
       post: [],
-      postId: props.match.params.postId
+      postId: props.match.params.postId,
+      userId: props.userId
     };
   }
+  
+  newComment = (comment) => {
+    console.log(comment);
+    const cs = this.state.comments;
+    cs.push(comment);
+    
+    this.setState({ comments: cs })
+  };
 
   componentDidMount() {
-    getResource(`users/${this.state.postId}/posts/${this.state.postId}`).then(post => {
-      console.log(post);
+    getResource(`/posts/${this.state.postId}`).then(post => {
       this.setState({ post: post.data });
     });
   }
@@ -67,6 +74,7 @@ export default class Post extends React.Component {
   };
 
   render() {
+    console.log(this.state);
     return (
       <Grid
         alignItems={'center'}
@@ -80,7 +88,7 @@ export default class Post extends React.Component {
           <div>
             { renderPost(this.state.post, 0) }
             { this.renderComments(this.state.comments) }
-            <CreateComment postId={this.state.post.id} />
+            <CreateComment postId={this.state.post.id} userId={this.state.userId} callback={this.newComment}/>
          </div>
         }
       </Grid>

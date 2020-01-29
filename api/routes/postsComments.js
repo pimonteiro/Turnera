@@ -10,7 +10,7 @@ const driver = neo4j.driver(
 
 const PostCommentsController = require('../controllers/postsComments');
 
-router.post('/posts/:id/comment', (req, res, next) => {
+router.post('/posts/:pid/comment', (req, res, next) => {
   const session = driver.session();
   
   PostCommentsController.createPostComment(session, req, res);
