@@ -115,7 +115,7 @@ class Group extends React.Component {
               {this.state.group.name}
             </Typography>
             {this.isMember() ? (
-              <Feed type='group'/>
+              <Feed type='group' groupId={this.state.groupId} userId={this.state.userId}/>
             ) : (
               <div>
                 <br/>

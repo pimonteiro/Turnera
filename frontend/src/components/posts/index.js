@@ -19,11 +19,15 @@ export default class Posts extends React.Component {
   }
 
   getPosts = async () => {
-    return await getResource(`user_feed/${this.state.userId}`);
+    if(this.props.type === 'feed')
+      return await getResource(`user_feed/${this.state.userId}`);
+    else
+      return await getResource(`groups/${this.state.groupId}/posts`)
   };
 
   componentDidMount() {
     this.getPosts().then(res => {
+      console.log(res)
       this.setState({ posts: slice(res.data) });
     });
   }
@@ -45,8 +49,8 @@ export default class Posts extends React.Component {
         <CreatePost
           groupId={this.state.groupId}
           userId={this.state.userId}
-          type='feed'
           callback={this.update}
+          type={this.state.type}
         />
         { renderPosts(this.state.posts) }
       </Grid>

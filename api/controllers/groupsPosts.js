@@ -1,4 +1,5 @@
 const GroupPosts = module.exports;
+const uuid4 = require('uuid4')
 
 GroupPosts.createGroupPost = (session, req, res) => {
   req.body.id = uuid4();

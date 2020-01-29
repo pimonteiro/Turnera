@@ -13,7 +13,7 @@ function renderHashtags(hashtags) {
 
   hashtags.forEach((hashtag, index) =>
     renderedHastags.push(
-      <span key={index}>{`#${hashtag} `}</span>
+      <span key={index}>{`${hashtag} `}</span>
     )
   );
 
@@ -45,6 +45,7 @@ function makeLike(post_id){
 }
 
 export function renderPost(post, index) {
+  console.log(post)
   return (
     <Card
       className={'mb-5'}
