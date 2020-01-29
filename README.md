@@ -1,10 +1,7 @@
 # Turnera
+Social Netwok project developed for the course *Desenvolvimento de Aplicações Web* (Web App Development).
 
-Your social network of choice. *wink wink*
-
-
-
-## Routes
+## API Routes
 ```text
 /signin POST
 /signup POST
@@ -48,3 +45,26 @@ Your social network of choice. *wink wink*
 	  /posts POST
 	  /groups POST
 ```
+
+## Running the App
+### 1º Start API server
+It requires _docker_ and _docker-compose_ to run.
+To start it, run the following commands:
+```
+cd api
+npm install
+docker-compose up	# start container containing Neo4j
+npm start		# start node server
+```
+
+### 2º Start React server
+```
+cd frontend
+npm install
+npm start
+```
+
+The API server **MUST** be started first so the servers use the correct ports for the services.
+
+API server -----> localhost:3000  
+React server ---> localhost:3001
