@@ -41,7 +41,7 @@ GroupPosts.indexGroupPost = (session, req, res) => {
         let post = record.get('p').properties;
         let user = {};
         
-        user.name = record.get('u').properties;
+        user = record.get('u').properties;
         
         post.owner = user;
         
