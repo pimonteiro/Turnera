@@ -32,7 +32,7 @@ router.post('/upload', async (req, res) => {
 
     let file = req.files.file
 
-    upload_file(file.data, file.name)
+    upload_file(file.data, file.md5)
         .then(link => {
             res.send(link)
         })
