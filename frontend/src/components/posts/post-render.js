@@ -26,7 +26,8 @@ function renderFiles(files){
   files.forEach((file, index) => {
     renderedFiles.push(
       <span key={index}>
-        <img style={{ maxWidth: '500px', maxHeight: '500px' }} src={file} alt={'post-file'} /><br/>
+          <a href={file}><img style={{ maxWidth: '500px', maxHeight: '500px' }} src={file} alt={'post-file'} /></a>
+        <br/>
       </span>
     )
   });
