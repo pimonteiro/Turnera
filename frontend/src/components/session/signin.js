@@ -8,6 +8,8 @@ import Link from '@material-ui/core/Link';
 import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import {createResource} from "../api-handler";
+import Alert from "react-bootstrap/Alert";
 
 export default class Signin extends React.Component {
 
@@ -17,10 +19,27 @@ export default class Signin extends React.Component {
     this.state = {
       email: '',
       password: '',
-      type: 'signin'
+      type: 'signin',
+      error: false
     };
+  
+    this.callback = this.props.callback.bind(this);
   }
-
+  
+  signin = () => {
+    createResource(this.state.type, {email: this.state.email, password: this.state.password, name: this.state.name, gender: this.state.gender, date: this.state.date })
+      .then(raw => {
+        if (raw.status !== 200) {
+          this.setState({ error: true });
+        } else {
+          this.callback(raw.data.id, raw.data.name, raw.data.token);
+        }
+      })
+      .catch(() => {
+        this.setState({ error: true });
+      });
+  };
+  
   render() {
     const action = 'Sign in';
     const signUpMessage = 'Don\'t have an account? Sign Up';
@@ -30,6 +49,13 @@ export default class Signin extends React.Component {
         component={'main'}
         maxWidth={'xs'}
       >
+        {this.state.error ?
+          <Alert variant={"danger"}>
+            Credenciais erradas
+          </Alert>
+          :
+          <div />
+        }
         <CssBaseline />
         <div className={useStyles.paper}>
           <Typography component={'h1'}
@@ -65,7 +91,7 @@ export default class Signin extends React.Component {
             <Button className={useStyles.submit}
               color={'primary'}
               fullWidth
-              onClick={this.props.callback.bind(this, this.state)}
+              onClick={this.signin}
               variant={'contained'}
             >
               { action }
