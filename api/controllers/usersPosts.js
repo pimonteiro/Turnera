@@ -61,7 +61,7 @@ UserPosts.showUserPost = (session, req, res) => {
 
             owner.name = record.get('a').properties.name;
             owner.id = record.get('a').properties.id;
-            owner.image = i[Math.floor(Math.random() * i.length)];
+            owner.image = record.get('a').properties.image
 
             ret.owner = owner;
           } else {ret.group = record.get('a').properties;}
