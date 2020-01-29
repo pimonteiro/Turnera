@@ -74,13 +74,9 @@ UserPosts.showUserPost = (session, req, res) => {
           likes.push(like);
         } else if (record.get('r').type === 'comment') {
           const comment = {};
-          const user = {};
 
           comment.text = record.get('r').properties.text;
-          user.name = record.get('a').properties.name;
-          user.id = record.get('a').properties.id;
-
-          comment.user = user;
+          comment.owner = record.get('a').properties
 
           comments.push(comment);
         }

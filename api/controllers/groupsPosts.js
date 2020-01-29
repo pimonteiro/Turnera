@@ -91,13 +91,9 @@ GroupPosts.showGroupPost = (session, req, res) => {
         }
         else if (record.get('r').type === 'comment'){
           let comment = {};
-          let user = {};
           
           comment.text = record.get('r').properties.text;
-          user.name = record.get('a').properties.name;
-          user.id = record.get('a').properties.id;
-          
-          comment.user = user;
+          comment.owner = record.get('a').properties
           
           comments.push(comment)
         }

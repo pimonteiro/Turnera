@@ -6,7 +6,11 @@ FeedController.index = (session, req, res) => {
         RETURN p as post \
         UNION ALL \
         MATCH (u:User { id: $id })-[:member]-(g:Group)-[:post]-(p:Post) \
-        RETURN p as post",
+        RETURN p as post \
+        UNION ALL \
+        MATCH (u:User { id: $id })-[:post]-(p:Post) \
+        RETURN p as post"
+        ,
         { id: req.params.id }
         )
         .then(data => {
