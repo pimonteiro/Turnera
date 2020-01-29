@@ -5,7 +5,7 @@ export default class Home extends React.Component {
   
   render() {
     return (
-      <Posts userId={this.props.userId}/>
+      <Posts type='feed' userId={this.props.userId}/>
     );
   }
 }

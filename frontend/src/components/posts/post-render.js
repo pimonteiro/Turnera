@@ -11,6 +11,8 @@ import { Button } from '@material-ui/core';
 function renderHashtags(hashtags) {
   const renderedHastags = [];
 
+  if(hashtags === undefined)
+    return renderedHastags
   hashtags.forEach((hashtag, index) =>
     renderedHastags.push(
       <span key={index}>{`${hashtag} `}</span>
@@ -22,6 +24,8 @@ function renderHashtags(hashtags) {
 
 function renderFiles(files){
   const renderedFiles = [];
+  if(files === undefined)
+    return renderedFiles
 
   files.forEach((file, index) => {
     renderedFiles.push(
@@ -88,7 +92,7 @@ export function renderPosts(posts) {
     renderedPosts.push(<h3 key={0}>Sem publicações</h3>);
   }
 
-  posts.forEach((post, index) =>
+  posts.reverse().forEach((post, index) =>
     renderedPosts.push(
       <div key={index}>
         <a href={`/posts/${post.id}`}><MdSend size={'1.5em'} /></a>

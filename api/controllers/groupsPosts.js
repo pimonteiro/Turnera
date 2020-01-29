@@ -5,8 +5,8 @@ GroupPosts.createGroupPost = (session, req, res) => {
   req.body.id = uuid4();
   req.body.date = new Date().getTime();
   
-  let uid = req.body.owner;
-  delete req.body.owner;
+  let uid = req.body.user;
+  delete req.body.user;
   
   session.run(
     "MATCH (u:User { id: $uid }), (g:Group { id: $gid }) \

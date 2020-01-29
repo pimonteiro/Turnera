@@ -33,7 +33,7 @@ export default class CreatePost extends React.Component {
       createResource(`users/${this.state.userId}/posts`, {
         text: text,
         hashtags: hashtags,
-        owner: this.state.userId,
+        user: this.state.userId,
         group: "",
         images: this.state.links,
         likes: []
@@ -48,7 +48,7 @@ export default class CreatePost extends React.Component {
       createResource(`groups/${this.state.groupId}/posts`,{
         text: text,
         hashtags: hashtags,
-        owner: this.state.userId,
+        user: this.state.userId,
         group: this.state.groupId,
         images: this.state.links,
         likes: []

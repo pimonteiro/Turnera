@@ -14,7 +14,8 @@ export default class Posts extends React.Component {
     this.state = {
       groupId: props.groupId,
       posts: [],
-      userId: props.userId
+      userId: props.userId,
+      type: props.type
     };
   }
 
@@ -33,7 +34,9 @@ export default class Posts extends React.Component {
   }
   
   update = () => {
-    getResource(`user_feed/${this.state.userId}`).then(res => {
+    this.getPosts()
+    //getResource(`user_feed/${this.state.userId}`).
+    .then(res => {
       this.setState({ posts: slice(res.data) });
     });
   };

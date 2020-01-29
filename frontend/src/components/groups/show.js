@@ -107,6 +107,17 @@ class Group extends React.Component {
             />
           </Grid>
           <Grid item
+                xs={12}
+              >
+                <div className={useStyles.paper}>
+                  <b>Membros</b>
+                  <br />
+                  <p>
+                    {this.renderMembers()}
+                  </p>
+                </div>
+              </Grid>
+          <Grid item
             xs={8}
           >
             <Typography component={'h1'}
@@ -129,17 +140,6 @@ class Group extends React.Component {
             <Grid container
               spacing={2}
             >
-              <Grid item
-                xs={12}
-              >
-                <div className={useStyles.paper}>
-                  <b>Membros</b>
-                  <br />
-                  <p>
-                    {this.renderMembers()}
-                  </p>
-                </div>
-              </Grid>
               <Grid item
                 xs={12}
               >
