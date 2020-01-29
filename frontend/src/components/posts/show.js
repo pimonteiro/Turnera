@@ -20,7 +20,7 @@ export default class Post extends React.Component {
     };
   }
   
-  newComment = (comment) => {
+  update = () => {
     getResource(`posts/${this.state.postId}`).then(post => {
       this.setState({ post: post.data });
     });
@@ -85,7 +85,7 @@ export default class Post extends React.Component {
           <div>
             { renderPost(this.state.post, 0) }
             { this.renderComments(this.state.post.comments) }
-            <CreateComment postId={this.state.post.id} userId={this.state.userId} callback={this.newComment}/>
+            <CreateComment postId={this.state.post.id} userId={this.state.userId} callback={this.update}/>
          </div>
         }
       </Grid>

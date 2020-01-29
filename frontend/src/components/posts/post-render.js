@@ -73,7 +73,7 @@ export function renderPost(post, index) {
         <Card.Text>
           { renderFiles(post.images) }
         </Card.Text>
-        {post.likes.length}<Button onClick={() => makeLike(post.id)}><FavoriteIcon size={'1.5em'} /></Button>
+        {post.likes === undefined ? 0 : post.likes.length}<Button onClick={() => makeLike(post.id)}><FavoriteIcon size={'1.5em'} /></Button>
       </Card.Body>
     </Card>
   );
