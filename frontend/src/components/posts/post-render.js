@@ -16,6 +16,20 @@ function renderHashtags(hashtags) {
   return renderedHastags;
 }
 
+function renderFiles(files){
+  const renderedFiles = [];
+
+  files.forEach((file, index) => {
+    renderedFiles.push(
+      <div>
+      <a href={file}>{file}</a><br/>
+      </div>
+    )
+  })
+
+  return renderedFiles;
+}
+
 export function renderPost(post, index) {
   return (
     <Card
@@ -42,6 +56,9 @@ export function renderPost(post, index) {
         </Card.Text>
         <Card.Text>
           { renderHashtags(post.hashtags) }
+        </Card.Text>
+        <Card.Text>
+          { renderFiles(post.images) }
         </Card.Text>
       </Card.Body>
     </Card>

@@ -2,13 +2,27 @@ import axios from 'axios';
 
 const host = process.env.REACT_APP_API_HOST;
 
-function createUrl(resource) {
+export function createUrl(resource) {
   if (resource.startsWith('sign')) {
     return `${host}/${resource}`;
   }
 
   return `${host}/${resource}?token=${localStorage.getItem('token')}`;
 }
+
+export const uploadFile = async (resource, file) => {
+  const url = createUrl(resource);
+
+  var formdata = new FormData()
+  formdata.append('file',file)
+
+  return await axios({
+    url: url,
+    method: "POST",
+    data: formdata
+  })
+}
+
 
 export const getResource = async resource => {
   const url = createUrl(resource);
