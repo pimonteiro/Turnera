@@ -3,6 +3,7 @@ const express = require('express');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const cors = require('cors');
+const fileUpload = require('express-fileupload');
 
 const groups = require('./routes/groups');
 const groupsPosts = require('./routes/groupsPosts');
@@ -17,6 +18,7 @@ const usersPosts = require('./routes/usersPosts');
 const posts = require('./routes/posts');
 const auth = require('./routes/auth');
 const feed = require('./routes/feed');
+const upload = require('./routes/upload');
 const AuthController = require("./controllers/auth");
 
 const app = express();
@@ -26,6 +28,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(fileUpload());
 
 app.use('/api', auth);
 
@@ -56,6 +59,7 @@ app.use('/api', usersGroups);
 app.use('/api', usersPosts);
 app.use('/api', posts);
 app.use('/api', feed);
+app.use('/api', upload);
 
 
 app.use(function(req, res, next) {
