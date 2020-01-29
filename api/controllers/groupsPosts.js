@@ -59,56 +59,59 @@ GroupPosts.indexGroupPost = (session, req, res) => {
 };
 
 GroupPosts.showGroupPost = (session, req, res) => {
+  console.log(req.params);
+  console.log('AQUI')
   session.run(
-    "MATCH (p:Post { id: $pid })-[r]-(a) RETURN p, r, a",
-    { pid: req.params.pid }
-    )
+    'MATCH (p:Post { id: $pid })-[r]-(a) RETURN p, r, a',
+    { pid: req.params.id }
+  )
     .then(data => {
-      let ret = data.records[0].get('p').properties;
-      let likes = [];
-      let comments = [];
-      
+      var ret = data.records[0].get('p').properties;
+
+      ret.group = '';
+
+      var likes = [];
+      var comments = [];
+
       data.records.forEach(record => {
-        if (record.get('r').type === 'post'){
-          if(record.get('a').labels[0] === 'User'){
-            let owner = {};
-            
+        if (record.get('r').type === 'post') {
+          if (record.get('a').labels[0] === 'User') {
+            var owner = {};
+
             owner.name = record.get('a').properties.name;
             owner.id = record.get('a').properties.id;
-            
-            ret.owner = owner
-          }
-          else
-            ret.group = record.get('a').properties
-        }
-        else if (record.get('r').type === 'likes'){
-          let like = {};
-          
+            owner.image = record.get('a').properties.image
+
+            ret.owner = owner;
+          } else {ret.group = record.get('a').properties;}
+        } else if (record.get('r').type === 'likes') {
+          var like = {};
+
           like.name = record.get('a').properties.name;
           like.id = record.get('a').properties.id;
-          
-          likes.push(like)
-        }
-        else if (record.get('r').type === 'comment'){
-          let comment = {};
-          
-          comment.text = record.get('r').properties.text;
+
+          likes.push(like);
+        } else if (record.get('r').type === 'comment') {
+          var comment = {};
+
+          comment = record.get('r').properties;
           comment.owner = record.get('a').properties
-          
-          comments.push(comment)
+
+          comments.push(comment);
         }
       });
       ret.likes = likes;
       ret.comments = comments;
-      
-      res.jsonp(ret)
+
+      res.jsonp(ret);
     })
     .catch(err => {
-      res.jsonp(err)
+      console.log(err)
+      res.jsonp(err);
     })
     .then(() => {
-      session.close()
-    })
+      session.close();
+    });
 };
 
 GroupPosts.deleteGroupPost = (session, req, res) => {
