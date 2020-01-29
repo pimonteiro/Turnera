@@ -2,8 +2,9 @@ const UserFriends = module.exports;
 
 UserFriends.createUserFriend = (session, req, res) => {
   session.run(
-    "MATCH (u:User { id: $id }), (f:User { id: $fid }) \
+    "MATCH (u:User { id: $id })-[r:friend_requests]-(f:User { id: $fid }) \
     CREATE (f)-[:friend]->(u) \
+    DELETE r \
     RETURN u",
     { id: req.params.id, fid: req.params.fid }
     )
