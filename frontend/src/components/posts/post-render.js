@@ -1,8 +1,12 @@
 import { MdSend } from 'react-icons/md';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+
 
 import Avatar from '@material-ui/core/Avatar';
 import Card from 'react-bootstrap/Card';
 import React from 'react';
+import { createResource } from '../api-handler';
+import { Button } from '@material-ui/core';
 
 function renderHashtags(hashtags) {
   const renderedHastags = [];
@@ -28,6 +32,15 @@ function renderFiles(files){
   })
 
   return renderedFiles;
+}
+
+function makeLike(post_id){
+  var user_id = localStorage.getItem('userId')
+  createResource(`posts/${post_id}/like`, {user: user_id})
+    .then(() => {
+      console.log("Like done!")
+    })
+
 }
 
 export function renderPost(post, index) {
@@ -60,6 +73,7 @@ export function renderPost(post, index) {
         <Card.Text>
           { renderFiles(post.images) }
         </Card.Text>
+        {post.likes.length}<Button onClick={() => makeLike(post.id)}><FavoriteIcon size={'1.5em'} /></Button>
       </Card.Body>
     </Card>
   );

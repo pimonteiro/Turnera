@@ -34,7 +34,8 @@ export default class CreatePost extends React.Component {
         hashtags: hashtags,
         owner: this.state.userId,
         group: "",
-        images: this.state.links
+        images: this.state.links,
+        likes: []
       })  
         .then(res => {
           console.log("POST FEITO")
@@ -47,7 +48,8 @@ export default class CreatePost extends React.Component {
         hashtags: hashtags,
         owner: this.state.userId,
         group: this.state.groupId,
-        images: this.state.links
+        images: this.state.links,
+        likes: []
       })
         .then(res => {
           console.log("POST FEITO")
@@ -63,12 +65,14 @@ export default class CreatePost extends React.Component {
           this.state.links.push(res.data)
           if(this.state.newPostFiles.length === this.state.links.length) {
             this.submit();
+            return;
           }
         })
         .catch(res => {
           console.log(res)
         })
       })
+      this.submit();
   }
 
   render() {

@@ -20,7 +20,8 @@ export default class CreateComment extends React.Component {
   }
 
   submit = () => {
-    createResource(`posts/${this.state.postId}/comment`, { user: this.state.userId, text: this.state.newCommentContent })
+    var body = { user: this.state.userId, text: this.state.newCommentContent }
+    createResource(`posts/${this.state.postId}/comment`, body)
       .then(res => this.callback(res.data));
   };
 

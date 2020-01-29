@@ -29,19 +29,20 @@ export default class Post extends React.Component {
   };
 
   componentDidMount() {
-    getResource(`/posts/${this.state.postId}`).then(post => {
+    getResource(`posts/${this.state.postId}`).then(post => {
       this.setState({ post: post.data });
     });
   }
 
-  renderComments = comments => {
+  renderComments = com => {
     const renderedComments = [];
 
-    if (comments.length === 0) {
+    if (com.length === 0) {
       renderedComments.push(<h3 key={0}>Sem comentários</h3>);
     }
 
-    comments.forEach((comment, index) =>
+    com.forEach((comment, index) =>{
+      console.log(comment)
       renderedComments.push(
         <Card
           className={'mb-5'}
@@ -53,12 +54,12 @@ export default class Post extends React.Component {
               <Avatar
                 alt={'user_image'}
                 className={'my-2'}
-                src={comment.user.image}
+                src={comment.owner.image}
                 style={{ marginRight: '10px', maxHeight: '50px', maxWidth: '50px' }}
               />
-              <a href={`/users/${comment.user.id}`}>
+              <a href={`/users/${comment.owner.id}`}>
                 <Card.Text style={{ display: 'table-cell', height: '50px', verticalAlign: 'middle' }}>
-                  { comment.user.name }
+                  { comment.owner.name }
                 </Card.Text>
               </a>
             </div>
@@ -67,7 +68,7 @@ export default class Post extends React.Component {
             </Card.Text>
           </Card.Body>
         </Card>
-      )
+      )}
     );
 
     return renderedComments;
@@ -87,7 +88,7 @@ export default class Post extends React.Component {
         :
           <div>
             { renderPost(this.state.post, 0) }
-            { this.renderComments(this.state.comments) }
+            { this.renderComments(this.state.post.comments) }
             <CreateComment postId={this.state.post.id} userId={this.state.userId} callback={this.newComment}/>
          </div>
         }
