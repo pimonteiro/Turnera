@@ -1,8 +1,11 @@
 import Posts from './posts';
 import React from 'react';
 
-export const Home = () => {
-  return (
-    <Posts/>
-  );
-};
+export default class Home extends React.Component {
+  
+  render() {
+    return (
+      <Posts userId={this.props.userId}/>
+    );
+  }
+}

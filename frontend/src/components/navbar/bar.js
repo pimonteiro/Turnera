@@ -68,7 +68,7 @@ export default class Bar extends React.Component {
           >
             <Navbar.Brand href={'/'}>Turnera</Navbar.Brand>
 
-            <Form action={'/api/search/users'}
+            <Form
               className={'centered'}
               inline
             >
